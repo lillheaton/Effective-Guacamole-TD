@@ -1,27 +1,42 @@
 
-import Victor from 'victor';
+import Vector from 'victor';
+import Game from './game';
 
 // Override CreateJs point to be Victor lib
-window.createjs.Point = Victor;
+window.createjs.Point = Vector;
 
-let CreateJs = window.createjs,
-	Vector = CreateJs.Point;
+let CreateJs = window.createjs;
 
 class App {
 	constructor(){
-		let stage = new CreateJs.Stage("demoCanvas");
-		var circle = new CreateJs.Shape();
-		circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
-		circle.x = 100;
-		circle.y = 100;
-		stage.addChild(circle);
+		this.stage = new CreateJs.Stage("canvas");
+		this.game = new Game(); 
 
-		stage.update();
+		this.circle = new CreateJs.Shape();
+		this.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
+		this.circle.x = 100;
+		this.circle.y = 100;
+
+		var shape = new createjs.Shape();
+ 		shape.graphics.beginFill("#ff0000").drawRect(0, 0, 100, 100);
+
+		this.stage.addChild(this.circle);
+ 		this.stage.addChild(shape);
 
 		// Check so override works
 		/*console.log(new Vector(10, 10).add(new Vector(20, 20)));
 		let test = new Vector(10, 10).add(new Vector(20, 20));
 		console.log(CreateJs.Matrix2D.identity.rotate(20).transformPoint(10, 10, test));*/
+		this.start();
+	}
+
+	start(){ CreateJs.Ticker.addEventListener("tick", this.loop.bind(this)) }
+
+	loop(time){
+		// time.delta == elapsed ms
+		this.game.update(this.time);
+		this.game.draw(this.stage, this.time);
+		this.stage.update();
 	}
 }
 
