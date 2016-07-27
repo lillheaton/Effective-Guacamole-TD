@@ -2,10 +2,8 @@
 import Vector from 'victor';
 import Game from './game';
 
-// Override CreateJs point to be Victor lib
-window.createjs.Point = Vector;
-
-let CreateJs = window.createjs;
+window.createjs.Point = Vector; // Override CreateJs point to be Victor lib
+let CreateJs = window.createjs; // Make CreateJs more accessible
 
 class App {
 	constructor(){
@@ -29,9 +27,13 @@ class App {
 		console.log(CreateJs.Matrix2D.identity.rotate(20).transformPoint(10, 10, test));*/
 		this.start();
 	}
-
+	
 	start(){ CreateJs.Ticker.addEventListener("tick", this.loop.bind(this)) }
 
+	/**
+	 * Application loop
+	 * @param  {CreateJS.Ticker.Events} time time.Delta == elapsed ms
+	 */
 	loop(time){
 		// time.delta == elapsed ms
 		this.game.update(this.time);

@@ -7,6 +7,9 @@
     "type": "git",
     "url": "git+https://github.com/lillheaton/Effective-Guacamole-TD.git"
   },
+  "scripts": {
+    "test": "mocha --compilers js:babel-register tests"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
@@ -23,6 +26,8 @@
     "victor": "^1.1.0"
   },
   "devDependencies": {
+    "babel-preset-es2015": "^6.9.0",
+    "babel-register": "^6.9.0",
     "chai": "^3.5.0",
     "mocha": "^2.5.3"
   }
