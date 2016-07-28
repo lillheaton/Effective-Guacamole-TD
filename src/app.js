@@ -8,8 +8,8 @@ let CreateJs = window.createjs; // Make CreateJs more accessible
 class App {
 	constructor(){
 		this.stage = new CreateJs.Stage("canvas");
-		this.game = new Game(); 
-
+		this.game = new Game(this.stage); 
+/*
 		this.circle = new CreateJs.Shape();
 		this.circle.graphics.beginFill("DeepSkyBlue").drawCircle(0, 0, 50);
 		this.circle.x = 100;
@@ -20,7 +20,7 @@ class App {
 
 		this.stage.addChild(this.circle);
  		this.stage.addChild(shape);
-
+*/
 		// Check so override works
 		/*console.log(new Vector(10, 10).add(new Vector(20, 20)));
 		let test = new Vector(10, 10).add(new Vector(20, 20));

@@ -2,26 +2,26 @@
 import MathHelper from './utils/mathHelper';
 
 export default class Grid {
-	constructor(x, y, cellSize, cellJudger){
-		this.cells = [];
+	constructor(x, y, tileSize, tileJudger){
+		this.tiles = [];
 		this.x = x
 		this.y = y;
-		this.cellSize = cellSize;
+		this.tileSize = tileSize;
 
-		this.generate(cellJudger);
+		this.generate(tileJudger);
 	}
 
 	/**
 	 * Populate cells
-	 * @param  {function} cellJudger Will determine and return a cell
+	 * @param  {function} tileJudger Will determine and return a cell
 	 * @return {void}
 	 */
-	generate(cellJudger) {
+	generate(tileJudger) {
 		for (var i = 0; i < this.x; i++) {
-			this.cells[i] = [];
+			this.tiles[i] = [];
 
 			for (var j = 0; j < this.y; j++) {
-				this.cells[i][j] = cellJudger(i, j);
+				this.tiles[i][j] = tileJudger(i, j);
 			}
 		}
 	}
@@ -31,11 +31,11 @@ export default class Grid {
 	 * @param  {vector} pos Screen vector
 	 * @return {Cell}     
 	 */
-	getCell(pos){
+	getTile(pos){
 		let gridPos = this.getGridPos(pos);
 
 		if(gridPos.x < this.x && gridPos.y < this.y){
-			return this.cells[gridPos.x][gridPos.y];
+			return this.tiles[gridPos.x][gridPos.y];
 		}
 
 		return null;
@@ -48,8 +48,8 @@ export default class Grid {
 	 */
 	getGridPos(pos){
 		return {
-			x: MathHelper.snapToFloor(pos.x, this.cellSize) / this.cellSize,
-			y: MathHelper.snapToFloor(pos.y, this.cellSize) / this.cellSize
+			x: MathHelper.snapToFloor(pos.x, this.tileSize) / this.tileSize,
+			y: MathHelper.snapToFloor(pos.y, this.tileSize) / this.tileSize
 		};
 	}
 }

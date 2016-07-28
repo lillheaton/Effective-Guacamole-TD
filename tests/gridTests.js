@@ -8,10 +8,10 @@ describe('Grid', function(){
 	var testGrid,
 		gridX = 10,
 		gridY = 10,
-		cellSize = 5;
+		tileSize = 5;
 
 	before(function(){
-		testGrid = new Grid(gridX, gridY, cellSize, function(gridPosX, gridPosY){
+		testGrid = new Grid(gridX, gridY, tileSize, function(gridPosX, gridPosY){
 			return { 
 				x: gridPosX, 
 				y: gridPosY, 
@@ -22,14 +22,14 @@ describe('Grid', function(){
 
 	describe('#generate()', function(){
 		it('should generate grid on instance', function(){
-			testGrid.cells.should.have.length(gridX);
-			testGrid.cells[0].should.have.length(gridY);
+			testGrid.tiles.should.have.length(gridX);
+			testGrid.tiles[0].should.have.length(gridY);
 		});
 	});
 
-	describe('#getCell()', function(){
+	describe('#getTile()', function(){
 		it('should get cell based on screen pos', function(){
-			testGrid.getCell({x: 12, y: 12}).should.have.property('type').that.equals('tower');
+			testGrid.getTile({x: 12, y: 12}).should.have.property('type').that.equals('tower');
 		});
 	});
 });
