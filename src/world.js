@@ -36,6 +36,7 @@ export default class World {
 			gridY * World.tileSize(), 
 			World.tileSize() - 2, World.tileSize() - 2);
 
+		// Choose tile type based on json settings
 		let tile = this.map[gridX][gridY].toString();
 		return new DynamicTile(this.settings.tileTypes[tile], rect, this.drawContainer);
 	}

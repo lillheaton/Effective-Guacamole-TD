@@ -7,6 +7,9 @@ const tileClasses = {
 	TowerTile
 };
 
+/**
+ * Wrapper for all the different tile types
+ */
 export default class DynamicTile {
 	constructor(className, ...args){
 		return new tileClasses[className](...args);
