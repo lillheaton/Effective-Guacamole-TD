@@ -2,15 +2,13 @@
 import Gird from './grid';
 import DynamicTile from './tiles/dynamicTile';
 
-let CreateJs = window.createjs;
-
 export default class World {
 	constructor(stage, settings){
 		this.settings = settings;
 		this.map = settings.map;
 
-		this.drawContainer = new CreateJs.Container();
-		this.drawContainer.setBounds(100, 100);
+		this.drawContainer = new createjs.Container();
+		this.drawContainer.on('click', this.onWorldClick.bind(this));
 		stage.addChild(this.drawContainer);
 
 		this.grid = new Gird(
@@ -31,14 +29,21 @@ export default class World {
 	 * @return {Tile}      
 	 */
 	tileJudger(gridX, gridY) {
-		let rect = new CreateJs.Rectangle(
+		let rect = new createjs.Rectangle(
 			gridX * World.tileSize(), 
 			gridY * World.tileSize(), 
 			World.tileSize() - 2, World.tileSize() - 2);
 
 		// Choose tile type based on json settings
-		let tile = this.map[gridX][gridY].toString();
-		return new DynamicTile(this.settings.tileTypes[tile], rect, this.drawContainer);
+		let tileNumber = this.map[gridX][gridY].toString(),
+			tile = this.settings.tileTypes[tileNumber];
+
+		return new DynamicTile(tile.type, rect, this.drawContainer);
+	}
+
+	onWorldClick(click){
+		let gridPos = this.grid.getArrayPos({x: click.stageX, y: click.stageY})
+		console.log(gridPos);
 	}
 
 	update(time){

@@ -7,7 +7,7 @@
 		[1,1,1,1,1]
 	],
 	"tileTypes": {
-		"0": "GrassTile",
-		"1": "TowerTile"
+		"0": {"type": "GrassTile", "walkable": true},
+		"1": {"type": "TowerTile", "walkable": false}
 	}
 }

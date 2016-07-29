@@ -1,6 +1,6 @@
 'use strict';
 
-import MathHelper from '../src/utils/mathHelper';
+import MathHelper from '../src/helpers/mathHelper';
 
 var should = require('chai').should();
 

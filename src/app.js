@@ -3,21 +3,20 @@ import Vector from 'victor';
 import Game from './game';
 
 window.createjs.Point = Vector; // Override CreateJs point to be Victor lib
-let CreateJs = window.createjs; // Make CreateJs more accessible
 
 class App {
 	constructor(){
-		this.stage = new CreateJs.Stage("canvas");
+		this.stage = new createjs.Stage("canvas");
 		this.game = new Game(this.stage); 
 
 		window.addEventListener('resize', this.fullScreen.bind(this), false);
-		
+
 		this.start();
 	}
 	
 	start(){ 
 		this.fullScreen();
-		CreateJs.Ticker.addEventListener("tick", this.loop.bind(this)) 
+		createjs.Ticker.addEventListener("tick", this.loop.bind(this)) 
 	}
 
 	/**

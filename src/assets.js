@@ -2,7 +2,7 @@
 let CreateJs = window.createjs; // Make CreateJs more accessible
 
 /**
- * Wrapper for the CreateJs Preload
+ * Wrapper for the CreateJs Preload functionallity
  */
 export default class Assets {
 	constructor(){
