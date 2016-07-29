@@ -1,8 +1,8 @@
 
-import Tile from './tile';
+import BaseTile from './baseTile';
 let CreateJs = window.createjs;
 	
-export default class TowerTile extends Tile {
+export default class TowerTile extends BaseTile {
 	constructor(...args){
 		super(...args);
 

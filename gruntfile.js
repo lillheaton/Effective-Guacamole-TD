@@ -46,7 +46,11 @@ module.exports = function(grunt){
 			html:{
 				files: ['<%= settings.dev %>/*.html'],
 				tasks: ['copy:html']
-			} 
+			},
+			json: {
+				files: ['<%= settings.dev %>/data/json/*.json'],
+				tasks: ['copy:json']
+			}
 		},
 
 		/***************************
@@ -85,12 +89,21 @@ module.exports = function(grunt){
 					src: '<%= settings.dev %>/index.html',
 					dest: '<%= settings.dist %>/index.html'
 				}]
-			}
+			},
+			json: {
+				files: [{
+					expand: true,
+					cwd: '<%= settings.dev %>/data',
+					src: '**',
+					dest: '<%= settings.dist %>/data/'
+				}]
+			} 
 		}
 	});
 
 	grunt.registerTask('dev', [
 		'copy:html',
+		'copy:json',
 		'browserify:dev'
 	]);
 

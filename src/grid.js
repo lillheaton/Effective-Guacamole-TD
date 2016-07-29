@@ -1,5 +1,5 @@
 
-import MathHelper from './utils/mathHelper';
+import MathHelper from './helpers/mathHelper';
 
 export default class Grid {
 	constructor(x, y, tileSize, tileJudger){

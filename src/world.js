@@ -1,27 +1,21 @@
 
 import Gird from './grid';
-import GrassTile from './tiles/grassTile';
-import TowerTile from './tiles/towerTile';
+import DynamicTile from './tiles/dynamicTile';
 
 let CreateJs = window.createjs;
 
 export default class World {
-	constructor(stage){
-		this.world = [
-			[1,1,1,1,1],
-			[1,0,0,0,1],
-			[1,0,0,0,1],
-			[1,0,0,0,1],
-			[1,1,1,1,1]
-		];
+	constructor(stage, settings){
+		this.settings = settings;
+		this.map = settings.map;
 
 		this.drawContainer = new CreateJs.Container();
 		this.drawContainer.setBounds(100, 100);
 		stage.addChild(this.drawContainer);
 
 		this.grid = new Gird(
-			this.world.length, 
-			this.world[0].length, 
+			this.map.length, 
+			this.map[0].length, 
 			World.tileSize(), 
 			this.tileJudger.bind(this));
 	}
@@ -42,14 +36,8 @@ export default class World {
 			gridY * World.tileSize(), 
 			World.tileSize() - 2, World.tileSize() - 2);
 
-		switch(this.world[gridX][gridY]){
-			case 1:
-				return new TowerTile(rect, this.drawContainer);
-
-			case 0:
-			default:
-				return new GrassTile(rect, this.drawContainer);
-		}
+		let tile = this.map[gridX][gridY].toString();
+		return new DynamicTile(this.settings.tileTypes[tile], rect, this.drawContainer);
 	}
 
 	update(time){

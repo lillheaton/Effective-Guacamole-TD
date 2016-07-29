@@ -1,0 +1,6 @@
+{
+	"path": "data/json/",
+	"manifest": [
+		{ "src": "world.json", "id": "world" }
+	]
+}

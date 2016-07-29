@@ -1,0 +1,6 @@
+{
+	"path": "data/",
+	"manifest":[
+		{ "src": "json/manifest.json", "type":"manifest", "id": "jsondata" }
+	]
+}

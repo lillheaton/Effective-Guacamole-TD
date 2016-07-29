@@ -11,12 +11,7 @@ class App {
 		this.game = new Game(this.stage); 
 
 		window.addEventListener('resize', this.fullScreen.bind(this), false);
-
-		// Check so override works
-		/*console.log(new Vector(10, 10).add(new Vector(20, 20)));
-		let test = new Vector(10, 10).add(new Vector(20, 20));
-		console.log(CreateJs.Matrix2D.identity.rotate(20).transformPoint(10, 10, test));*/
-
+		
 		this.start();
 	}
 	
