@@ -61,7 +61,5 @@ export default class World {
 	}
 
 	draw(stage, time){
-
-		//this.drawContainer.updateCache();
 	}
 }

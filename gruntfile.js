@@ -42,7 +42,11 @@ module.exports = function(grunt){
 			},
 			scripts:{
 				files: ['<%= settings.dev %>/*.js']
-			}
+			},
+			html:{
+				files: ['<%= settings.dev %>/*.html'],
+				tasks: ['copy:html']
+			} 
 		},
 
 		/***************************

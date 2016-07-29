@@ -4,7 +4,6 @@ import World from './world';
 export default class Game {
 	constructor(stage){
 		this.world = new World(stage);
-
 	}
 
 	update(time){
