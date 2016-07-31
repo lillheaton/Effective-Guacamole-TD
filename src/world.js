@@ -1,11 +1,12 @@
 
+import ArrayHelper from './helpers/arrayHelper';
 import Gird from './grid';
 import DynamicTile from './tiles/dynamicTile';
 
 export default class World {
 	constructor(stage, settings){
 		this.settings = settings;
-		this.map = settings.map;
+		this.map = ArrayHelper.rotate(settings.map);
 
 		this.drawContainer = new createjs.Container();
 		this.drawContainer.on('click', this.onWorldClick.bind(this));
@@ -14,7 +15,7 @@ export default class World {
 		this.grid = new Gird(
 			this.map.length, 
 			this.map[0].length, 
-			World.tileSize(), 
+			World.tileSize(),
 			this.tileJudger.bind(this));
 	}
 
@@ -33,7 +34,7 @@ export default class World {
 
 		// Map contains which tile type it is 1,2,3 etc.
 		let typeNumber = this.map[gridX][gridY].toString();
-
+		
 		// Sets the tile type on the grid position
 		return this.createTile(typeNumber, gridPos);
 	}
