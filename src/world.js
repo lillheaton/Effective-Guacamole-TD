@@ -1,6 +1,7 @@
 
-import ArrayHelper from './helpers/arrayHelper';
 import Gird from './grid';
+import Vector from 'victor';
+import ArrayHelper from './helpers/arrayHelper';
 import DynamicTile from './tiles/dynamicTile';
 
 export default class World {
@@ -21,6 +22,30 @@ export default class World {
 
 	static tileSize(){
 		return 40;
+	}
+
+	/**
+	 * Vector size of half the tile size
+	 * @return {Vector} 
+	 */
+	static halfTile(){
+		return new Vector(this.tileSize() / 2, this.tileSize() / 2);
+	}
+
+	/**
+	 * Start position where the units will come from
+	 * @return {Vector} 
+	 */
+	get start(){
+		return Vector.fromObject(this.settings.start).multiplyScalar(World.tileSize()).add(World.halfTile());
+	}
+
+	/**
+	 * The position where the units are trying to go
+	 * @return {Vector} 
+	 */
+	get goal(){
+		return Vector.fromObject(this.settings.goal).multiplyScalar(World.tileSize()).add(World.halfTile());
 	}
 
 	/**
@@ -63,8 +88,8 @@ export default class World {
 
 		return new DynamicTile(
 			this.settings.tileTypes[typeNumber.toString()].type, 
-			rect, 
-			this.drawContainer);
+			this.drawContainer,
+			rect);
 	}
 
 	/**

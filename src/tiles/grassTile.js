@@ -1,13 +1,17 @@
 
 import BaseTile from './baseTile';
+import Color from '../color';
 
 export default class GrassTile extends BaseTile {
-	constructor(...args){
+	constructor(drawContainer, ...args){
 		super(...args);
+		this.setupGraphics(drawContainer);
+	}
 
+	setupGraphics(drawContainer){
 		this.shape = new createjs.Shape();
- 		this.shape.graphics.beginFill("#00b300").drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
-		this.drawContainer.addChild(this.shape);
+ 		this.shape.graphics.beginFill(Color.green).drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+		drawContainer.addChild(this.shape);
 	}
 
 	update(time){

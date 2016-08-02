@@ -1,6 +1,7 @@
 
 import World from './world';
 import Assets from './assets';
+import UnitManager from './unitManager';
 
 export default class Game {
 	constructor(stage){
@@ -8,9 +9,16 @@ export default class Game {
 		this.running = false;
 
 		this.assets = new Assets();
-		this.assets.on('complete', this.assetsComplete.bind(this));
-		this.assets.on('progress', this.assetsDownloadProgress.bind(this));
 
+		this.assets.on('progress', (progress) => {
+			console.log(progress.loaded);
+		});
+
+		this.assets.on('complete', () => {
+			console.log("Assets download completed");
+			this.start(); // Initiate the game
+		});
+		
 		// Start downloading assets
 		this.assets.loadManifest("data/manifest.json");
 	}
@@ -21,16 +29,11 @@ export default class Game {
 	 */
 	start(){
 		this.running = true;
-		this.world = new World(this.stage, this.assets.get("world"));
-	}
+		let worldSettings = this.assets.get("world"),
+			unitSettings = this.assets.get("units");
 
-	assetsDownloadProgress(progress){
-		console.log(progress.loaded);
-	}
-
-	assetsComplete(){
-		console.log("Assets download completed");
-		this.start();
+		this.world = new World(this.stage, worldSettings);
+		this.unitManager = new UnitManager(this.stage, this.world.start, this.world.goal, unitSettings);
 	}
 
 	update(time){
@@ -38,6 +41,7 @@ export default class Game {
 			return;
 
 		this.world.update(time);
+		this.unitManager.update(time);
 	}
 
 	draw(stage, time){

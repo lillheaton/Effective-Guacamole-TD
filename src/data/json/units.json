@@ -1,0 +1,10 @@
+{
+	"waves": [
+		{ "type": "Creep", "length": 1 }
+	],
+	"unitTypes": {
+		"Creep": { "width": 40, "height": 40, "health": 100 }
+	},
+	"waveIntervalMs": 5000, 
+	"unitIntervalMs": 2000
+}

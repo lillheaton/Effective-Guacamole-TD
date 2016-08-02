@@ -12,5 +12,7 @@
 	"tileTypes": {
 		"0": {"type": "GrassTile", "convertable": true},
 		"1": {"type": "TowerTile" }
-	}
+	},
+	"start": { "x": 1, "y": 3 },
+	"goal": { "x": 5, "y": 3 }
 }
