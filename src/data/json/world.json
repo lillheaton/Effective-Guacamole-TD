@@ -14,5 +14,5 @@
 		"1": {"type": "TowerTile", "wall": true }
 	},
 	"start": { "x": 1, "y": 3 },
-	"goal": { "x": 8, "y": 3 }
+	"goal": { "x": 10, "y": 3 }
 }

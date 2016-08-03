@@ -57,7 +57,7 @@ export default class UnitManager {
 	}
 
 	createUnit(type){
-		return new DynamicUnit(type, this.drawContainer, this.wavePath, this.settings.unitTypes[type]);
+		return new DynamicUnit(type, this.drawContainer, this.wavePath.map(s => s.clone()), this.settings.unitTypes[type]);
 	}
 
 
