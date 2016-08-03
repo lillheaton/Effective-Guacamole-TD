@@ -1,4 +1,5 @@
 
+import Vector from 'victor';
 import MathHelper from './helpers/mathHelper';
 
 export default class Grid {
@@ -58,7 +59,29 @@ export default class Grid {
 		return null;
 	}
 
+	getScreenVector(pos){
+		return Vector.fromObject(pos)
+				.multiplyScalar(this.tileSize)
+				.add(new Vector(this.tileSize / 2, this.tileSize / 2));
+	}
+
 	validArrayPos(pos){
 		return pos.x < this.x && pos.y < this.y
 	}
+
+	createAStarNodes(){
+		let nodes = [];
+		for (var i = 0; i < this.tiles.length; i++) {
+			nodes[i] = [];
+			for (var j = 0; j < this.tiles[0].length; j++) {
+				nodes[i][j] = {
+					x: i, y: j, f: 0, g: 0, h: 0,
+					vector: this.getScreenVector({x: i, y: j}),
+					isWall: this.tiles[i][j].isWall
+				};
+			};
+		};
+
+		return nodes;
+	}	
 }

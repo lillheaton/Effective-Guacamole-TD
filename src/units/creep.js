@@ -4,13 +4,13 @@ import BaseUnit from './baseUnit';
 import Steering from '../helpers/steering';
 import Vector from 'victor';
 
-const maxVelocity = new Vector(0.8, 0.8);
+const maxVelocity = new Vector(2.2, 2.2);
 
 export default class Creep extends BaseUnit {
-	constructor(drawContainer, position, goal, settings){
-		super(settings);
-		this.position = position;
-		this.goal = goal;
+	constructor(drawContainer, path, settings){
+		super(settings);	
+		this.path = path;
+		this.position = path[0];
 
 		this.setupGraphics(drawContainer);
 	}
@@ -21,8 +21,22 @@ export default class Creep extends BaseUnit {
 		drawContainer.addChild(this.shape);
 	}
 
-	update(time){
-		Steering.seek(this.position, maxVelocity, this.goal);
+	move(){
+		if(this.path.length < 1)
+			return;
+		
+		let currentGoal = this.path[0],
+			distance = this.position.distance(currentGoal);
+
+		if(distance < 1.5){
+			this.path.shift(); // Go to next position
+		}
+		
+		Steering.seek(this.position, maxVelocity, currentGoal);
+	}
+
+	update(time){	
+		this.move();
 		this.shape.x = this.position.x;
 		this.shape.y = this.position.y;
 	}

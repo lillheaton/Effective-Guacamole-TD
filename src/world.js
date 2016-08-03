@@ -1,11 +1,17 @@
 
-import Gird from './grid';
+import keyMirror from 'keyMirror';
 import Vector from 'victor';
-import ArrayHelper from './helpers/arrayHelper';
+
+import Gird from './grid';
 import DynamicTile from './tiles/dynamicTile';
 
-export default class World {
+import AStar from './helpers/aStar';
+import ArrayHelper from './helpers/arrayHelper';
+
+export default class World extends createjs.EventDispatcher {	
 	constructor(stage, settings){
+		super();
+
 		this.settings = settings;
 		this.map = ArrayHelper.rotate(settings.map);
 
@@ -16,11 +22,17 @@ export default class World {
 		this.grid = new Gird(
 			this.map.length, 
 			this.map[0].length, 
-			World.tileSize(),
+			World.tileSize,
 			this.tileJudger.bind(this));
 	}
 
-	static tileSize(){
+	static get Events() {
+		return keyMirror({
+			WORLD_CHANGE: null
+		});
+	}
+
+	static get tileSize(){
 		return 40;
 	}
 
@@ -29,7 +41,7 @@ export default class World {
 	 * @return {Vector} 
 	 */
 	static halfTile(){
-		return new Vector(this.tileSize() / 2, this.tileSize() / 2);
+		return new Vector(World.tileSize / 2, World.tileSize / 2);
 	}
 
 	/**
@@ -37,7 +49,8 @@ export default class World {
 	 * @return {Vector} 
 	 */
 	get start(){
-		return Vector.fromObject(this.settings.start).multiplyScalar(World.tileSize()).add(World.halfTile());
+		//return Vector.fromObject(this.settings.start).multiplyScalar(World.tileSize).add(World.halfTile());
+		return this.settings.start;
 	}
 
 	/**
@@ -45,7 +58,8 @@ export default class World {
 	 * @return {Vector} 
 	 */
 	get goal(){
-		return Vector.fromObject(this.settings.goal).multiplyScalar(World.tileSize()).add(World.halfTile());
+		//return Vector.fromObject(this.settings.goal).multiplyScalar(World.tileSize).add(World.halfTile());
+		return this.settings.goal;
 	}
 
 	/**
@@ -65,16 +79,6 @@ export default class World {
 	}
 
 	/**
-	 * Get the tile settings from the current map
-	 * @param  {vector} gridPos x & y in the grid array
-	 * @return {object}         The tile type specified in the JSON settings file
-	 */
-	getTileSettings(gridPos){
-		let typeNumber = this.map[gridPos.x][gridPos.y].toString();
-		return this.settings.tileTypes[typeNumber];
-	}
-
-	/**
 	 * Create tile based on type
 	 * @param  {int} typeNumber	   Which tile type number 1,2,3 etc
 	 * @param  {vector} gridPos    x & y in the grid array
@@ -82,14 +86,16 @@ export default class World {
 	 */
 	createTile(typeNumber, gridPos){
 		let rect = new createjs.Rectangle(
-			gridPos.x * World.tileSize(), 
-			gridPos.y * World.tileSize(), 
-			World.tileSize() - 2, World.tileSize() - 2);
+			gridPos.x * World.tileSize, 
+			gridPos.y * World.tileSize, 
+			World.tileSize, World.tileSize),
+			tileSettings = this.settings.tileTypes[typeNumber.toString()];
 
 		return new DynamicTile(
-			this.settings.tileTypes[typeNumber.toString()].type, 
+			tileSettings.type, 
 			this.drawContainer,
-			rect);
+			rect,
+			tileSettings);
 	}
 
 	/**
@@ -105,14 +111,20 @@ export default class World {
 		this.grid.tiles[gridPos.x][gridPos.y] = this.createTile(typeNumber, gridPos);
 	}
 
+	calculatePath(start, goal){
+		let nodes = this.grid.createAStarNodes();
+		return AStar.search(nodes, nodes[start.x][start.y], nodes[goal.x][goal.y]).map(n => n.vector);
+	}
+
 
 
 	// ==== EVENTS ====
 
 	onWorldClick(click){
 		let gridPos = this.grid.getArrayPos({x: click.stageX, y: click.stageY})
-		if(gridPos && this.getTileSettings(gridPos).convertable) {
+		if(gridPos && this.grid.tiles[gridPos.x][gridPos.y].isConvertable) {
 			this.setTile(gridPos, 1) // TODO: Change this based on which tower user has choosen
+			this.dispatchEvent(World.Events.WORLD_CHANGE);
 		}
 	}
 

@@ -33,7 +33,7 @@ export default class Game {
 			unitSettings = this.assets.get("units");
 
 		this.world = new World(this.stage, worldSettings);
-		this.unitManager = new UnitManager(this.stage, this.world.start, this.world.goal, unitSettings);
+		this.unitManager = new UnitManager(this.stage, this.world, unitSettings);
 	}
 
 	update(time){

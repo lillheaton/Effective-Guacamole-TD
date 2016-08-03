@@ -1,21 +1,26 @@
 
 import DynamicUnit from './units/dynamicUnit';
+import World from './world';
 
 export default class UnitManager {
-	constructor(stage, startPos, endPos, settings){
+	constructor(stage, world, settings){
 		this.stage = stage;
-		this.startPos = startPos;
-		this.endPos = endPos;
+		this.world = world;
 		this.settings = settings;
 		this.units = [];
 
 		this.drawContainer = new createjs.Container();
 		stage.addChild(this.drawContainer);
 
+		// Listen to if the world changes
+		this.world.on(World.Events.WORLD_CHANGE, this.onWorldUpdate.bind(this));
+
 		this.currentWave = 0;
 		this.ongoingWave = false;
 		this.sentWave = false;
+		this.wavePath = [];
 
+		this.onWorldUpdate(); // Calculate the path for the units
 		this.prepareWave(); // Start sending waves
 	}
 
@@ -52,8 +57,24 @@ export default class UnitManager {
 	}
 
 	createUnit(type){
-		return new DynamicUnit(type, this.drawContainer, this.startPos, this.endPos, this.settings.unitTypes[type]);
+		return new DynamicUnit(type, this.drawContainer, this.wavePath, this.settings.unitTypes[type]);
 	}
+
+
+
+
+	onWorldUpdate(){
+		// Update the path for the wave
+		this.wavePath = this.world.calculatePath(this.world.start, this.world.goal);
+
+		// Update all the units path
+		for (var i = 0; i < this.units.length; i++) {
+			this.units[i].path = this.world.calculatePath(this.world.grid.getArrayPos(this.units[i].position), this.world.goal);
+		};
+	}
+
+
+
 
 	update(time){
 		for (var i = this.units.length - 1; i >= 0; i--) {

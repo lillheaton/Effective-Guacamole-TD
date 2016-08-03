@@ -10,7 +10,11 @@ export default class TowerTile extends BaseTile {
 
 	setupGraphics(drawContainer){
 		this.shape = new createjs.Shape();
- 		this.shape.graphics.beginFill(Color.gray).drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
+ 		this.shape.graphics
+ 					.setStrokeStyle(2)
+ 					.beginStroke(Color.white)
+ 					.beginFill(Color.gray)
+ 					.drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 		drawContainer.addChild(this.shape);
 	}
 }
