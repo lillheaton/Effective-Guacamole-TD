@@ -111,6 +111,12 @@ export default class World extends createjs.EventDispatcher {
 		this.grid.tiles[gridPos.x][gridPos.y] = this.createTile(typeNumber, gridPos);
 	}
 
+	/**
+	 * Calculates path between start and goal
+	 * @param  {vector} start  Grid postion
+	 * @param  {vector} goal   Grid postion
+	 * @return {vector[]}      Array of screen vector
+	 */
 	calculatePath(start, goal){
 		let nodes = this.grid.createAStarNodes();
 		return AStar.search(nodes, nodes[start.x][start.y], nodes[goal.x][goal.y]).map(n => n.vector);

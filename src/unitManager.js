@@ -62,7 +62,10 @@ export default class UnitManager {
 
 
 
-
+	/**
+	 * Event when the world updates like a new tower puts in place
+	 * @return {void}
+	 */
 	onWorldUpdate(){
 		// Update the path for the wave
 		this.wavePath = this.world.calculatePath(this.world.start, this.world.goal);

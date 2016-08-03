@@ -21,10 +21,14 @@ export default class Creep extends BaseUnit {
 		drawContainer.addChild(this.shape);
 	}
 
+	/**
+	 * Moving the user on the specified path
+	 * @return {void}
+	 */
 	move(){
 		if(this.path.length < 1)
 			return;
-		
+
 		let currentGoal = this.path[0],
 			distance = this.position.distance(currentGoal);
 
