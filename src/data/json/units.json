@@ -1,5 +1,6 @@
 {
 	"waves": [
+		{ "type": "Creep", "length": 5 },
 		{ "type": "Creep", "length": 5 }
 	],
 	"unitTypes": {

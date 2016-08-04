@@ -3,24 +3,18 @@ import DynamicUnit from './units/dynamicUnit';
 import World from './world';
 
 export default class UnitManager {
-	constructor(stage, world, settings){
+	constructor(stage, settings){
 		this.stage = stage;
-		this.world = world;
 		this.settings = settings;
 		this.units = [];
-
-		this.drawContainer = new createjs.Container();
-		stage.addChild(this.drawContainer);
-
-		// Listen to if the world changes
-		this.world.on(World.Events.WORLD_CHANGE, this.onWorldUpdate.bind(this));
 
 		this.currentWave = 0;
 		this.ongoingWave = false;
 		this.sentWave = false;
 		this.wavePath = [];
+	}
 
-		this.onWorldUpdate(); // Calculate the path for the units
+	init(){
 		this.prepareWave(); // Start sending waves
 	}
 
@@ -36,6 +30,7 @@ export default class UnitManager {
 			return; // TODO: Send event 
 
 		let wave = this.settings.waves[this.currentWave];
+		console.log("Starting wave " + (this.currentWave + 1));
 		this.ongoingWave = true;
 		this.sendUnit(wave, 0);
 	}
@@ -57,22 +52,23 @@ export default class UnitManager {
 	}
 
 	createUnit(type){
-		return new DynamicUnit(type, this.drawContainer, this.wavePath.map(s => s.clone()), this.settings.unitTypes[type]);
+		return new DynamicUnit(type, this.stage, this.wavePath.map(s => s.clone()), this.settings.unitTypes[type]);
 	}
 
 
 
 	/**
-	 * Event when the world updates like a new tower puts in place
-	 * @return {void}
+	 * Event that the world has been changed, a new tower for example
+	 * @param  {World} world 
+	 * @return {void}       
 	 */
-	onWorldUpdate(){
+	worldChanged(world){
 		// Update the path for the wave
-		this.wavePath = this.world.calculatePath(this.world.start, this.world.goal);
+		this.wavePath = world.calculatePath(world.start, world.goal);
 
 		// Update all the units path
 		for (var i = 0; i < this.units.length; i++) {
-			this.units[i].path = this.world.calculatePath(this.world.grid.getArrayPos(this.units[i].position), this.world.goal);
+			this.units[i].path = world.calculatePath(world.grid.getArrayPos(this.units[i].position), world.goal);
 		};
 	}
 
@@ -82,6 +78,7 @@ export default class UnitManager {
 	update(time){
 		for (var i = this.units.length - 1; i >= 0; i--) {
 			if(!this.units[i].alive){
+				this.units[i].destroy();
 				this.units.splice(i, 1);
 				return;
 			}

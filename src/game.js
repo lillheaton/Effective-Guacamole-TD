@@ -28,19 +28,33 @@ export default class Game {
 	 * @return {void}
 	 */
 	start(){
-		this.running = true;
 		let worldSettings = this.assets.get("world"),
 			unitSettings = this.assets.get("units");
 
+		// Instantiate
 		this.world = new World(this.stage, worldSettings);
-		this.unitManager = new UnitManager(this.stage, this.world, unitSettings);
+		this.unitManager = new UnitManager(this.stage, unitSettings);
+
+		// Listen to events
+		this.world.on(World.Events.WORLD_CHANGE, this.onWorldChange.bind(this));
+
+		// Initiate
+		this.world.init();
+		this.unitManager.init();
+
+		this.running = true;
 	}
+
+	onWorldChange(worldEvent){
+		this.unitManager.worldChanged(worldEvent.target);
+	}
+
 
 	update(time){
 		if(!this.running)
 			return;
 
-		this.world.update(time);
+		this.world.update(time, this.unitManager.units);
 		this.unitManager.update(time);
 	}
 

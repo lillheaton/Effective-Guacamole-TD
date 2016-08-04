@@ -59,16 +59,30 @@ export default class Grid {
 		return null;
 	}
 
+	/**
+	 * Converts grid array pos {x,y} to screen positions
+	 * @param  {{x,y}} pos Grid postion
+	 * @return {vector}     Screen vector
+	 */
 	getScreenVector(pos){
 		return Vector.fromObject(pos)
 				.multiplyScalar(this.tileSize)
 				.add(new Vector(this.tileSize / 2, this.tileSize / 2));
 	}
 
+	/**
+	 * Checks if the grid pos is inside of array length
+	 * @param  {{x,y}} pos Grid position
+	 * @return {bool}     
+	 */
 	validArrayPos(pos){
 		return pos.x < this.x && pos.y < this.y
 	}
 
+	/**
+	 * Generate nodes  based on grid tiles. Used by aStar to calculate path
+	 * @return {nodes[][]}
+	 */
 	createAStarNodes(){
 		let nodes = [];
 		for (var i = 0; i < this.tiles.length; i++) {

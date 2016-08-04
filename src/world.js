@@ -11,19 +11,10 @@ import ArrayHelper from './helpers/arrayHelper';
 export default class World extends createjs.EventDispatcher {	
 	constructor(stage, settings){
 		super();
-
 		this.settings = settings;
 		this.map = ArrayHelper.rotate(settings.map);
-
-		this.drawContainer = new createjs.Container();
-		this.drawContainer.on('click', this.onWorldClick.bind(this));
-		stage.addChild(this.drawContainer);
-
-		this.grid = new Gird(
-			this.map.length, 
-			this.map[0].length, 
-			World.tileSize,
-			this.tileJudger.bind(this));
+		this.stage = stage;
+		this.stage.on('click', this.onWorldClick.bind(this));
 	}
 
 	static get Events() {
@@ -32,34 +23,34 @@ export default class World extends createjs.EventDispatcher {
 		});
 	}
 
-	static get tileSize(){
-		return 40;
-	}
+	static get tileSize(){ return 40; }
 
 	/**
 	 * Vector size of half the tile size
 	 * @return {Vector} 
 	 */
-	static halfTile(){
-		return new Vector(World.tileSize / 2, World.tileSize / 2);
-	}
+	static halfTile(){ return new Vector(World.tileSize / 2, World.tileSize / 2); }
 
 	/**
 	 * Start position where the units will come from
 	 * @return {Vector} 
 	 */
-	get start(){
-		//return Vector.fromObject(this.settings.start).multiplyScalar(World.tileSize).add(World.halfTile());
-		return this.settings.start;
-	}
+	get start(){ return this.settings.start; }
 
 	/**
 	 * The position where the units are trying to go
 	 * @return {Vector} 
 	 */
-	get goal(){
-		//return Vector.fromObject(this.settings.goal).multiplyScalar(World.tileSize).add(World.halfTile());
-		return this.settings.goal;
+	get goal(){ return this.settings.goal; }
+
+	init(){
+		this.grid = new Gird(
+			this.map.length, 
+			this.map[0].length, 
+			World.tileSize,
+			this.tileJudger.bind(this));
+
+		this.dispatchEvent(World.Events.WORLD_CHANGE, this);
 	}
 
 	/**
@@ -93,7 +84,7 @@ export default class World extends createjs.EventDispatcher {
 
 		return new DynamicTile(
 			tileSettings.type, 
-			this.drawContainer,
+			this.stage,
 			rect,
 			tileSettings);
 	}
@@ -122,7 +113,13 @@ export default class World extends createjs.EventDispatcher {
 		return AStar.search(nodes, nodes[start.x][start.y], nodes[goal.x][goal.y]).map(n => n.vector);
 	}
 
-
+	updateTiles(time, units){
+		for (var i = this.grid.tiles.length - 1; i >= 0; i--) {
+			for (var j = this.grid.tiles[i].length - 1; j >= 0; j--) {
+				this.grid.tiles[i][j].update(time, units);
+			}
+		}
+	}
 
 	// ==== EVENTS ====
 
@@ -130,7 +127,7 @@ export default class World extends createjs.EventDispatcher {
 		let gridPos = this.grid.getArrayPos({x: click.stageX, y: click.stageY})
 		if(gridPos && this.grid.tiles[gridPos.x][gridPos.y].isConvertable) {
 			this.setTile(gridPos, 1) // TODO: Change this based on which tower user has choosen
-			this.dispatchEvent(World.Events.WORLD_CHANGE);
+			this.dispatchEvent(World.Events.WORLD_CHANGE, this);
 		}
 	}
 
@@ -138,12 +135,8 @@ export default class World extends createjs.EventDispatcher {
 
 	// ==== GAME LOOPS ====
 
-	update(time){
-		for (var i = this.grid.tiles.length - 1; i >= 0; i--) {
-			for (var j = this.grid.tiles[i].length - 1; j >= 0; j--) {
-				this.grid.tiles[i][j].update(time);
-			}
-		}
+	update(time, units){
+		this.updateTiles(time, units);
 	}
 
 	draw(stage, time){

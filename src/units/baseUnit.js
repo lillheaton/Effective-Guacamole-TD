@@ -9,5 +9,11 @@ export default class BaseUnit {
 		return this.health > 0;
 	}
 
+	damagedTaken(damage){
+		this.health -= damage;
+	}
+
+	destroy(){}
+
 	update(time){}
 }

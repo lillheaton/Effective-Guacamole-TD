@@ -16,7 +16,8 @@ class App {
 	
 	start(){ 
 		this.fullScreen();
-		createjs.Ticker.addEventListener("tick", this.loop.bind(this)) 
+		createjs.Ticker.addEventListener("tick", this.loop.bind(this));
+		createjs.Ticker.framerate = 30;
 	}
 
 	/**
@@ -34,8 +35,8 @@ class App {
 	 */
 	loop(time){
 		// time.delta == elapsed ms
-		this.game.update(this.time);
-		this.game.draw(this.stage, this.time);
+		this.game.update(time);
+		this.game.draw(this.stage, time);
 		this.stage.update();
 	}
 }
