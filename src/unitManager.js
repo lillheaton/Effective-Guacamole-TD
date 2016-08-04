@@ -1,6 +1,5 @@
 
 import DynamicUnit from './units/dynamicUnit';
-import World from './world';
 
 export default class UnitManager {
 	constructor(stage, settings){
@@ -26,8 +25,10 @@ export default class UnitManager {
 		if(this.ongoingWave)
 			throw new Error("Already sent a wave");
 
-		if(this.currentWave > this.settings.waves.length)
-			return; // TODO: Send event 
+		if(this.currentWave > this.settings.waves.length){
+			console.log("No more waves!");
+			return;
+		}
 
 		let wave = this.settings.waves[this.currentWave];
 		console.log("Starting wave " + (this.currentWave + 1));

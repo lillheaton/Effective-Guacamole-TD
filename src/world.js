@@ -15,6 +15,10 @@ export default class World extends createjs.EventDispatcher {
 		this.map = ArrayHelper.rotate(settings.map);
 		this.stage = stage;
 		this.stage.on('click', this.onWorldClick.bind(this));
+
+		this.start = null; //Start position where the units will come from
+		this.goal = null; //The position where the units are trying to go
+		this.findUnitsOriginAndGoal();
 	}
 
 	static get Events() {
@@ -23,31 +27,19 @@ export default class World extends createjs.EventDispatcher {
 		});
 	}
 
-	static get tileSize(){ return 40; }
+	get tileSize(){ return this.settings.tileSize; }
 
 	/**
 	 * Vector size of half the tile size
 	 * @return {Vector} 
 	 */
-	static halfTile(){ return new Vector(World.tileSize / 2, World.tileSize / 2); }
-
-	/**
-	 * Start position where the units will come from
-	 * @return {Vector} 
-	 */
-	get start(){ return this.settings.start; }
-
-	/**
-	 * The position where the units are trying to go
-	 * @return {Vector} 
-	 */
-	get goal(){ return this.settings.goal; }
+	get halfTile(){ return new Vector(this.tileSize / 2, this.tileSize / 2); }
 
 	init(){
 		this.grid = new Gird(
 			this.map.length, 
 			this.map[0].length, 
-			World.tileSize,
+			this.tileSize,
 			this.tileJudger.bind(this));
 
 		this.dispatchEvent(World.Events.WORLD_CHANGE, this);
@@ -77,9 +69,9 @@ export default class World extends createjs.EventDispatcher {
 	 */
 	createTile(typeNumber, gridPos){
 		let rect = new createjs.Rectangle(
-			gridPos.x * World.tileSize, 
-			gridPos.y * World.tileSize, 
-			World.tileSize, World.tileSize),
+			gridPos.x * this.tileSize, 
+			gridPos.y * this.tileSize, 
+			this.tileSize, this.tileSize),
 			tileSettings = this.settings.tileTypes[typeNumber.toString()];
 
 		return new DynamicTile(
@@ -111,6 +103,25 @@ export default class World extends createjs.EventDispatcher {
 	calculatePath(start, goal){
 		let nodes = this.grid.createAStarNodes();
 		return AStar.search(nodes, nodes[start.x][start.y], nodes[goal.x][goal.y]).map(n => n.vector);
+	}
+
+	/**
+	 * Find units origin and where they are trying to go
+	 * @return {void} 
+	 */
+	findUnitsOriginAndGoal(){
+		for (var i = 0; i < this.map.length; i++) {
+			for (var j = 0; j < this.map[0].length; j++) {
+				let typeNumber = this.map[i][j],
+					tileType = this.settings.tileTypes[typeNumber.toString()];
+
+				if(tileType.start)
+					this.start = {x:i, y:j};
+
+				if(tileType.goal)
+					this.goal = {x:i, y:j};
+			};
+		};
 	}
 
 	updateTiles(time, units){

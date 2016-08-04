@@ -3,16 +3,18 @@
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+		[1,3,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 	],
 	"tileTypes": {
-		"0": {"type": "GrassTile", "convertable": true },
-		"1": {"type": "TowerTile", "wall": true, "range": 50, "damage": 10 }
+		"0": {"type": "GenericTile", "convertable": true },
+		"1": {"type": "GenericTile", "convertable": false, "wall": true, "color": "#999966" },
+		"3": {"type": "GenericTile", "convertable": false, "start": true, "color": "#ffffff" },
+		"4": {"type": "GenericTile", "convertable": false, "goal": true, "color": "#000000" },
+		"9": {"type": "TowerTile", "wall": true, "range": 50, "damage": 10 }
 	},
-	"start": { "x": 1, "y": 3 },
-	"goal": { "x": 10, "y": 3 }
+	"tileSize": 40
 }

@@ -31,8 +31,12 @@ export default class Creep extends BaseUnit {
 	 * @return {void}
 	 */
 	move(){
-		if(this.path.length < 1)
+		if(this.path.length < 1){
+			// We are at goal
+			this.health = 0;
+			this.destroy();
 			return;
+		}
 
 		let currentGoal = this.path[0],
 			distance = this.position.distance(currentGoal);

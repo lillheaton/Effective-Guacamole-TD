@@ -1,9 +1,9 @@
 
-import GrassTile from './grassTile';
+import GenericTile from './genericTile';
 import TowerTile from './towerTile';
 
 const tileClasses = {
-	GrassTile,
+	GenericTile,
 	TowerTile
 };
 
