@@ -1,4 +1,7 @@
 
+import GameState from './gameState';
+
+import World from './world';
 import DynamicUnit from './units/dynamicUnit';
 
 export default class UnitManager {
@@ -11,6 +14,8 @@ export default class UnitManager {
 		this.ongoingWave = false;
 		this.sentWave = false;
 		this.wavePath = [];
+
+		GameState.on(World.Events.WORLD_CHANGE, this.onWorldChanged.bind(this));
 	}
 
 	init(){
@@ -25,7 +30,7 @@ export default class UnitManager {
 		if(this.ongoingWave)
 			throw new Error("Already sent a wave");
 
-		if(this.currentWave > this.settings.waves.length){
+		if(this.currentWave == this.settings.waves.length){
 			console.log("No more waves!");
 			return;
 		}
@@ -63,7 +68,8 @@ export default class UnitManager {
 	 * @param  {World} world 
 	 * @return {void}       
 	 */
-	worldChanged(world){
+	onWorldChanged(event){
+		let world = event.data;
 		// Update the path for the wave
 		this.wavePath = world.calculatePath(world.start, world.goal);
 

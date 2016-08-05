@@ -8,15 +8,17 @@ export default class GenericTile extends BaseTile {
 		this.setupGraphics(drawContainer);
 	}
 
-	get color(){
-		return this.settings.color || Color.green;
-	}
+	get color(){ return this.settings.color || Color.green; }
+	get borderColor(){ return this.settings.borderColor }
 
 	setupGraphics(drawContainer){
 		this.shape = new createjs.Shape();
+		
+		if(this.borderColor){
+			this.shape.graphics.setStrokeStyle(1).beginStroke(this.borderColor);
+		}
+
  		this.shape.graphics
- 			.setStrokeStyle(2)
- 			.beginStroke(Color.white)
  			.beginFill(this.color)
  			.drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
  			

@@ -10,13 +10,14 @@ export default class TowerTile extends BaseTile {
 
 	get range(){ return this.settings.range || 0; }
 	get damage(){ return this.settings.damage || 0; }
+	get color(){ return this.settings.color || Color.gray; }
 
 	setupGraphics(drawContainer){
 		this.shape = new createjs.Shape();
  		this.shape.graphics
  					.setStrokeStyle(2)
  					.beginStroke(Color.white)
- 					.beginFill(Color.gray)
+ 					.beginFill(this.color || Color.gray)
  					.drawRect(this.rect.x, this.rect.y, this.rect.width, this.rect.height);
 		drawContainer.addChild(this.shape);
 	}

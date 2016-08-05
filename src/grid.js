@@ -47,10 +47,10 @@ export default class Grid {
 	 * @param  {vector} pos Screen vector
 	 * @return {object}     Snap grid position
 	 */
-	getArrayPos(pos){
+	getArrayPos(pos, padding){
 		let gridPos = {
-			x: MathHelper.snapToFloor(pos.x, this.tileSize) / this.tileSize,
-			y: MathHelper.snapToFloor(pos.y, this.tileSize) / this.tileSize
+			x: Math.floor(MathHelper.snapToFloor(pos.x, this.tileSize, padding) / this.tileSize),
+			y: Math.floor(MathHelper.snapToFloor(pos.y, this.tileSize, padding) / this.tileSize)
 		};
 
 		if(this.validArrayPos(gridPos))

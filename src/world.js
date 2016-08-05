@@ -2,17 +2,20 @@
 import keyMirror from 'keyMirror';
 import Vector from 'victor';
 
+import GameState from './gameState';
+
 import Gird from './grid';
 import DynamicTile from './tiles/dynamicTile';
 
 import AStar from './helpers/aStar';
 import ArrayHelper from './helpers/arrayHelper';
 
-export default class World extends createjs.EventDispatcher {	
-	constructor(stage, settings){
-		super();
+
+export default class World {	
+	constructor(stage, settings){		
 		this.settings = settings;
 		this.map = ArrayHelper.rotate(settings.map);
+		this.grid = [];
 		this.stage = stage;
 		this.stage.on('click', this.onWorldClick.bind(this));
 
@@ -23,7 +26,8 @@ export default class World extends createjs.EventDispatcher {
 
 	static get Events() {
 		return keyMirror({
-			WORLD_CHANGE: null
+			WORLD_CHANGE: null,
+			PLACED_TOWER: null
 		});
 	}
 
@@ -42,7 +46,7 @@ export default class World extends createjs.EventDispatcher {
 			this.tileSize,
 			this.tileJudger.bind(this));
 
-		this.dispatchEvent(World.Events.WORLD_CHANGE, this);
+		GameState.raiseEvent(World.Events.WORLD_CHANGE, this);
 	}
 
 	/**
@@ -135,12 +139,16 @@ export default class World extends createjs.EventDispatcher {
 	// ==== EVENTS ====
 
 	onWorldClick(click){
-		let gridPos = this.grid.getArrayPos({x: click.stageX, y: click.stageY})
-		if(gridPos && this.grid.tiles[gridPos.x][gridPos.y].isConvertable) {
-			this.setTile(gridPos, 1) // TODO: Change this based on which tower user has choosen
-			this.dispatchEvent(World.Events.WORLD_CHANGE, this);
+		let gridPos = this.grid.getArrayPos({x: click.stageX, y: click.stageY});
+		if(gridPos && this.grid.tiles[gridPos.x][gridPos.y].isConvertable && GameState.placeingNewTower) {
+			this.setTile(gridPos, GameState.selectedTower);
+			
+			GameState.raiseEvent(World.Events.PLACED_TOWER);
+			GameState.raiseEvent(World.Events.WORLD_CHANGE, this);
 		}
 	}
+
+
 
 
 

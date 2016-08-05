@@ -1,6 +1,7 @@
 
 import World from './world';
 import Assets from './assets';
+import Dock from './dock';
 import UnitManager from './unitManager';
 
 export default class Game {
@@ -29,26 +30,24 @@ export default class Game {
 	 */
 	start(){
 		let worldSettings = this.assets.get("world"),
-			unitSettings = this.assets.get("units");
+			unitSettings = this.assets.get("units"),
+			worldStage = this.stage.addChild(new createjs.Container());
 
 		// Instantiate
-		this.world = new World(this.stage, worldSettings);
-		this.unitManager = new UnitManager(this.stage, unitSettings);
+		this.world = new World(worldStage, worldSettings);
+		this.unitManager = new UnitManager(worldStage, unitSettings);
+		this.dock = new Dock(this.stage, worldSettings);
 
 		// Listen to events
-		this.world.on(World.Events.WORLD_CHANGE, this.onWorldChange.bind(this));
+		//this.world.on(World.Events.WORLD_CHANGE, this.onWorldChange.bind(this));
 
 		// Initiate
 		this.world.init();
 		this.unitManager.init();
+		this.dock.init();
 
 		this.running = true;
 	}
-
-	onWorldChange(worldEvent){
-		this.unitManager.worldChanged(worldEvent.target);
-	}
-
 
 	update(time){
 		if(!this.running)
