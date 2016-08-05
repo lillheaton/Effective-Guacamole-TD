@@ -50,7 +50,7 @@ export default class World {
 	}
 
 	/**
-	 * Decide what tile type it should be.
+	 * Decides and create the tile
 	 * @param  {int} gridX X in grid array
 	 * @param  {int} gridY Y in grid array
 	 * @return {Tile}      
@@ -142,7 +142,7 @@ export default class World {
 		let gridPos = this.grid.getArrayPos({x: click.stageX, y: click.stageY});
 		if(gridPos && this.grid.tiles[gridPos.x][gridPos.y].isConvertable && GameState.placeingNewTower) {
 			this.setTile(gridPos, GameState.selectedTower);
-			
+
 			GameState.raiseEvent(World.Events.PLACED_TOWER);
 			GameState.raiseEvent(World.Events.WORLD_CHANGE, this);
 		}

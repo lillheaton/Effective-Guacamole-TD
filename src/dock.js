@@ -35,6 +35,11 @@ export default class Dock {
 		this.stage.addChild(this.drawContainer);
 	}
 
+	/**
+	 * Search through the different tile types for the ones who can attack
+	 * @param  {json} worldSettings World JSON settings
+	 * @return {object[]}               List of the attacking tile types
+	 */
 	extractTileTypes(worldSettings) {
 		let types = [];
 		for (var prop in worldSettings.tileTypes) {
@@ -47,6 +52,11 @@ export default class Dock {
 		return types;
 	}
 
+	/**
+	 * Create a container for the docker graphics
+	 * @param  {createjs.Stage} stage Game main stage
+	 * @return {createjs.Container}       
+	 */
 	createDrawContainer(stage) {
 		let container = new createjs.Container();
 		container.y = stage.canvas.height - this.tileSize - (this.padding * 2);
@@ -61,6 +71,12 @@ export default class Dock {
 		return container;
 	}
 
+	/**
+	 * Decides and create the tile
+	 * @param  {int} gridX X in grid array
+	 * @param  {int} gridY Y in grid array
+	 * @return {Tile}      
+	 */
 	tileJudger(gridX, gridY){
 		let tilePos = new Vector(gridX * this.tileSize + (gridX * this.padding) + this.padding, this.padding),
 			tileType = this.tileTypes[gridX][gridY],
