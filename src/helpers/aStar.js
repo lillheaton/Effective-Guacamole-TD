@@ -36,7 +36,7 @@ const AStar = {
 			openSet.splice(openSet.indexOf(currentNode), 1);
 			closedSet.push(currentNode);
 
-			let neighbors = ArrayHelper.neighbors(nodes, currentNode, false);
+			let neighbors = ArrayHelper.neighbors(nodes, currentNode, true);
 
 			for (var i = 0; i < neighbors.length; i++) {
 				let neighbor = neighbors[i];
