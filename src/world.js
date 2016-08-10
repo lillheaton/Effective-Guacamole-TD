@@ -6,6 +6,7 @@ import GameState from './gameState';
 
 import Gird from './grid';
 import DynamicTile from './tiles/dynamicTile';
+import RectangleObstacle from './obstacles/rectangleObstacle';
 
 import AStar from './helpers/aStar';
 import ArrayHelper from './helpers/arrayHelper';
@@ -19,9 +20,15 @@ export default class World {
 		this.stage = stage;
 		this.stage.on('click', this.onWorldClick.bind(this));
 
-		this.start = null; //Start position where the units will come from
-		this.goal = null; //The position where the units are trying to go
-		this.findUnitsOriginAndGoal();
+		this.start = null; // Start position where the units will come from
+		this.goal = null; // The position where the units are trying to go
+		this.mapIterator((x, y, tileType) => {
+			if(tileType.start)
+				this.start = {x:x, y:y};
+
+			if(tileType.goal)
+				this.goal = {x:x, y:y};
+		});
 	}
 
 	static get Events() {
@@ -38,6 +45,17 @@ export default class World {
 	 * @return {Vector} 
 	 */
 	get halfTile(){ return new Vector(this.tileSize / 2, this.tileSize / 2); }
+
+	get obstacles(){
+		let arr = [];
+
+		this.mapIterator((x, y, tileType) => {
+			if(tileType.wall)
+				arr.push(new RectangleObstacle(this.grid.tiles[x][y].rect));
+		})
+
+		return arr;
+	}
 
 	init(){
 		this.grid = new Gird(
@@ -109,24 +127,18 @@ export default class World {
 		return AStar.search(nodes, nodes[start.x][start.y], nodes[goal.x][goal.y]).map(n => n.vector);
 	}
 
-	/**
-	 * Find units origin and where they are trying to go
-	 * @return {void} 
-	 */
-	findUnitsOriginAndGoal(){
+	mapIterator(func){
 		for (var i = 0; i < this.map.length; i++) {
 			for (var j = 0; j < this.map[0].length; j++) {
+
 				let typeNumber = this.map[i][j],
 					tileType = this.settings.tileTypes[typeNumber.toString()];
 
-				if(tileType.start)
-					this.start = {x:i, y:j};
-
-				if(tileType.goal)
-					this.goal = {x:i, y:j};
+				func(i, j, tileType);
 			};
 		};
 	}
+
 
 	updateTiles(time, units){
 		for (var i = this.grid.tiles.length - 1; i >= 0; i--) {
@@ -139,7 +151,9 @@ export default class World {
 	// ==== EVENTS ====
 
 	onWorldClick(click){
-		let gridPos = this.grid.getArrayPos({x: click.stageX, y: click.stageY});
+		let clickPos = this.stage.globalToLocal(click.stageX, click.stageY),
+			gridPos = this.grid.getArrayPos(clickPos);
+			
 		if(gridPos && this.grid.tiles[gridPos.x][gridPos.y].isConvertable && GameState.placeingNewTower) {
 			this.setTile(gridPos, GameState.selectedTower);
 

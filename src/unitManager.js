@@ -9,6 +9,7 @@ export default class UnitManager {
 		this.stage = stage;
 		this.settings = settings;
 		this.units = [];
+		this.worldObstacles = null;
 
 		this.currentWave = 0;
 		this.ongoingWave = false;
@@ -72,10 +73,11 @@ export default class UnitManager {
 		let world = event.data;
 		// Update the path for the wave
 		this.wavePath = world.calculatePath(world.start, world.goal);
+		this.worldObstacles = world.obstacles;
 
 		// Update all the units path
 		for (var i = 0; i < this.units.length; i++) {
-			this.units[i].path = world.calculatePath(world.grid.getArrayPos(this.units[i].position), world.goal);
+			this.units[i].path = world.calculatePath(world.grid.getArrayPos(this.units[i].position), world.goal);			
 		};
 	}
 
@@ -90,7 +92,7 @@ export default class UnitManager {
 				return;
 			}
 
-			this.units[i].update(time);
+			this.units[i].update(time, this.worldObstacles);
 		};
 
 		if(this.units.length < 1 && this.sentWave){

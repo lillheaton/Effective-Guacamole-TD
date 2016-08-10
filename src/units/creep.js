@@ -13,7 +13,7 @@ export default class Creep extends BaseUnit {
 
 		this.setupGraphics();
 	}
-
+	
 	setupGraphics(){
 		this.shape = new createjs.Shape();
  		this.shape.graphics.beginFill(Color.red).drawCircle(0, 0, this.settings.width / 2);
@@ -25,12 +25,13 @@ export default class Creep extends BaseUnit {
 		this.drawContainer.removeChild(this.shape);
 	}
 
-	update(time) {
+	update(time, obstacles) {
 		if(this.position.distance(this.goal) <= 2){
 			this.destroy();
 		}
 
 		this.steering.followPath(this.path);
+		//this.steering.collisionAvoidance(obstacles);
 		this.steering.update(time);
 
 		this.shape.x = this.position.x;

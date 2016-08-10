@@ -6,8 +6,12 @@ const defaultSettings = {
 	maxVelocity: 3.5 * 1000,
 	mass: 20,
 	slowingRadious: 70,
-	pathRadious: 20
+	pathRadious: 20,
+
+	maxSeeAhead: 40,
+	maxAvoidanceForce: 2000
 }
+
 
 export default class Steering {
 	constructor(boid, settings){
@@ -17,6 +21,7 @@ export default class Steering {
 		this.steering = new Vector(0,0);
 		this.velocity = this.truncate(new Vector(-1,-2), this.settings.maxVelocity);
 		this.desiredVelocity = new Vector(1,0);
+		this.avoidanceForce = new Vector(0,0);
 
 		this.currentNodePath = 0;
 	}
@@ -38,14 +43,49 @@ export default class Steering {
 		this.currentNodePath = 0;
 	}
 
+	intersectsRectangle(ahead, rect){
+		let scalar = this.settings.maxSeeAhead * 0.5 * this.velocity.length() / this.settings.maxVelocity,
+			tv = this.velocity.clone().normalize().multiplyScalar(scalar),
+			ahead2 = this.boid.position.clone().add(tv); // ahead2 is half the length of ahead
 
+		return rect.contains(ahead.x, ahead.y) || 
+			rect.contains(ahead2.x, ahead2.y) || 
+			rect.intersects(this.boid.rect);
+	}
+
+	mostThreatingObstacle(ahead, obstacles){
+		let collision = false,
+			mostThreating = null;
+
+		for (var i = 0; i < obstacles.length; i++) {
+			collision = false;
+
+			if(obstacles[i].rect){
+
+				if(this.intersectsRectangle(ahead, obstacles[i].rect)){
+					if(mostThreating == null ||
+						this.boid.position.distance(obstacles[i].center) < 
+						this.boid.position.distance(mostThreating.center)){
+						mostThreating = obstacles[i];
+					}
+				}
+			}
+		}
+
+		return mostThreating;
+	}
+
+
+	collisionAvoidance(obstacles){
+		this.steering.add(this.doCollisionAvoidance(obstacles));
+	}
 
 	/**
 	 * The public method to be used. See doFollowPath() for more information
 	 */
 	followPath(path){
 		if(this.currentNodePath > path.length)
-			throw new Error("If new path is set, resetPath() needs to be called first");
+			this.resetPath();
 
 		let slowingRadious = this.currentNodePath == path.length - 1 ? this.settings.slowingRadious : 0
 		this.seek(this.doFollowPath(path), slowingRadious);
@@ -96,6 +136,25 @@ export default class Steering {
 		return target;
 	}
 
+	doCollisionAvoidance(obstacles){
+		let tvScalar = this.settings.maxSeeAhead * this.velocity.length() / this.settings.maxVelocity,
+			tv = this.velocity.clone().normalize().multiplyScalar(tvScalar),
+			ahead = this.boid.position.clone().add(tv); // Ahead is the velocity vector, but longer
+			
+		let threat = this.mostThreatingObstacle(ahead, obstacles);
+
+		if(threat){
+			this.avoidanceForce.x = ahead.x - threat.center.x;
+			this.avoidanceForce.y = ahead.y - threat.center.y;
+
+			this.avoidanceForce.normalize().multiplyScalar(this.settings.maxAvoidanceForce);
+		}else {
+			this.avoidanceForce = new Vector(0,0);
+		}
+
+		return this.avoidanceForce;
+	}
+ 
 
 
 	/**
