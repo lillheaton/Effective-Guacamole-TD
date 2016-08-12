@@ -79,7 +79,7 @@ export default class Dock {
 	 * @return {Tile}      
 	 */
 	tileJudger(gridX, gridY){
-		let tilePos = new Vector(gridX * this.tileSize + (gridX * this.padding) + this.padding, this.padding),
+		let tilePos = new Vector(gridX * this.tileSize + this.padding, this.padding),
 			tileType = this.tileTypes[gridX][gridY],
 			text = new createjs.Text(tileType.name, "20px Arial", "#D1D1BC"),
 			shape = new createjs.Shape();
