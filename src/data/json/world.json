@@ -11,13 +11,13 @@
 		[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
 	],
 	"tileTypes": {
-		"0": {"type": "GenericTile", "convertable": true, "color": "#466964", "borderColor": "#6C8C84" },
-		"1": {"type": "GenericTile", "convertable": false, "wall": true, "color": "#302C29" },
+		"0": {"type": "GenericTile", "convertable": true, "color": "TealColor", "borderColor": "TealBoarderColor" },
+		"1": {"type": "GenericTile", "convertable": false, "wall": true, "color": "greyBrownColor" },
 
-		"3": {"type": "GenericTile", "convertable": false, "start": true, "color": "#D1D1BC" },
-		"4": {"type": "GenericTile", "convertable": false, "goal": true, "color": "#D1D1BC" },
+		"3": {"type": "GenericTile", "convertable": false, "start": true, "color": "greyWhite" },
+		"4": {"type": "GenericTile", "convertable": false, "goal": true, "color": "greyWhite" },
 
-		"8": {"type": "TowerTile", "attacks": true, "wall": true, "range": 1, "damage": 10, "color": "#C44741" },
+		"8": {"type": "TowerTile", "attacks": true, "wall": true, "range": 1, "damage": 10, "color": "darkBlue" },
 		"9": {"type": "TowerTile", "attacks": true, "wall": true, "range": 100, "damage": 5, "color": "#52616D"}
 	},
 	"tileSize": 40

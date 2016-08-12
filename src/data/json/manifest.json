@@ -2,6 +2,7 @@
 	"path": "data/json/",
 	"manifest": [
 		{ "src": "world.json", "type": "json", "id": "world" },
-		{ "src": "units.json", "type": "json", "id": "units" }
+		{ "src": "units.json", "type": "json", "id": "units" },
+		{ "src": "color.json", "type": "json", "id": "color" }
 	]
 }

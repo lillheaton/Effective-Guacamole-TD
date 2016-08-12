@@ -35,6 +35,11 @@ class GameState extends createjs.EventDispatcher {
 		}
 	}
 
+	on(name, listener){
+		console.log("Listen to " + name);
+		super.on(name, listener);
+	}
+
 	raiseEvent(name, data){
 		console.log("Raise event " + name);
 		this.updateStatus(name, data);

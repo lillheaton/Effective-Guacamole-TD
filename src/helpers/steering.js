@@ -85,7 +85,7 @@ export default class Steering {
 	 */
 	followPath(path){
 		if(this.currentNodePath > path.length)
-			this.resetPath();
+			throw new Error("Needs to reset path before setting a new one");
 
 		let slowingRadious = this.currentNodePath == path.length - 1 ? this.settings.slowingRadious : 0
 		this.seek(this.doFollowPath(path), slowingRadious);

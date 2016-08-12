@@ -4,26 +4,30 @@ import Assets from './assets';
 import Dock from './dock';
 import UnitManager from './unitManager';
 
+const cameraSpeed = 20;
+
 export default class Game {
 	constructor(stage){
 		this.stage = stage;		
 		this.running = false;
-		this.assets = new Assets();
+		this.keys = [];
 		this.worldStage = stage.addChild(new createjs.Container());
 
-		this.assets.on('progress', (progress) => {
+		Assets.middleware = this.settingsColorConverter.bind(this);
+		Assets.on('progress', (progress) => {
 			console.log(progress.loaded);
 		});
 
-		this.assets.on('complete', () => {
+		Assets.on('complete', () => {
 			console.log("Assets download completed");
 			this.start(); // Initiate the game
 		});
 
-		window.onkeydown = this.onKeyDown.bind(this);
+		window.onkeydown = (e => this.keys[e.keyCode] = true);
+		window.onkeyup = (e => this.keys[e.keyCode] = false);
 		
 		// Start downloading assets
-		this.assets.loadManifest("data/manifest.json");
+		Assets.loadManifest("data/manifest.json");
 	}
 
 	/**
@@ -31,13 +35,10 @@ export default class Game {
 	 * @return {void}
 	 */
 	start(){
-		let worldSettings = this.assets.get("world"),
-			unitSettings = this.assets.get("units");
-
 		// Instantiate
-		this.world = new World(this.worldStage, worldSettings);
-		this.unitManager = new UnitManager(this.worldStage, unitSettings);
-		this.dock = new Dock(this.stage, worldSettings);
+		this.world = new World(this.worldStage);
+		this.unitManager = new UnitManager(this.worldStage);
+		this.dock = new Dock(this.stage);
 
 		// Initiate
 		this.world.init();
@@ -47,26 +48,38 @@ export default class Game {
 		this.running = true;
 	}
 
-	onKeyDown(e){
-		const cameraSpeed = 20;
+	settingsColorConverter(setting){
+		let colors = Assets.get('color', false).colors;
 
-		switch(e.keyCode){
-			case 37:
-				this.worldStage.regX -= cameraSpeed;
-				break;
-			case 38:
-				this.worldStage.regY -= cameraSpeed;
-				break;
-			case 39:
-				this.worldStage.regX += cameraSpeed;
-				break;
-			case 40:
-				this.worldStage.regY += cameraSpeed;
-				break;
-		}
+		var temp = JSON.stringify(setting, (key, value) => {
+			if(key.indexOf("color") !== -1 || key.indexOf("Color") !== -1) {
+				return colors[value] || value;
+			}
+
+			return value;
+		});
+
+		return JSON.parse(temp);
+	}
+
+
+	keysUpdate(){
+		if(this.keys[37])
+			this.worldStage.regX -= cameraSpeed;
+
+		else if(this.keys[38])
+			this.worldStage.regY -= cameraSpeed;
+
+		else if(this.keys[39])
+			this.worldStage.regX += cameraSpeed;
+			
+		else if(this.keys[40])
+			this.worldStage.regY += cameraSpeed;
 	}
 
 	update(time){
+		this.keysUpdate();
+
 		if(!this.running)
 			return;
 

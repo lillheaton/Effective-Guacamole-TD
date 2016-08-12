@@ -1,22 +1,26 @@
 
-import Color from '../color';
 import BaseUnit from './baseUnit';
 import Vector from 'victor';
 
 export default class Creep extends BaseUnit {
 	constructor(drawContainer, path, settings){
 		super(settings);	
-		this.path = path;
+		this._path = path;
 		this.position = path[0].clone();
 		this.goal = path[path.length - 1];
 		this.drawContainer = drawContainer;
 
 		this.setupGraphics();
 	}
+
+	set path(value){
+		this.steering.resetPath();
+		this._path = value;
+	}
 	
 	setupGraphics(){
 		this.shape = new createjs.Shape();
- 		this.shape.graphics.beginFill(Color.red).drawCircle(0, 0, this.settings.width / 2);
+ 		this.shape.graphics.beginFill("#C44741").drawCircle(0, 0, this.settings.width / 2);
 		this.drawContainer.addChild(this.shape);
 	}
 
@@ -30,7 +34,7 @@ export default class Creep extends BaseUnit {
 			this.destroy();
 		}
 
-		this.steering.followPath(this.path);
+		this.steering.followPath(this._path);
 		//this.steering.collisionAvoidance(obstacles);
 		this.steering.update(time);
 

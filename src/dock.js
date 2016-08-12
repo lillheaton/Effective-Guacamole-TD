@@ -2,13 +2,14 @@ import Vector from 'victor';
 import keyMirror from 'keyMirror';
 import ArrayHelper from './helpers/arrayHelper';
 
+import Assets from './assets';
 import GameState from './gameState';
 import Grid from './grid';
-import Color from './color';
 
 export default class Dock {
-	constructor(stage, worldSettings){
-		this.tileTypes = ArrayHelper.rotate([this.extractTileTypes(worldSettings)]);
+	constructor(stage){
+		this.colors = Assets.get('color', false).colors;
+		this.tileTypes = ArrayHelper.rotate([this.extractTileTypes(Assets.get("world"))]);
 		this.grid = [];
 		this.stage = stage;
 
@@ -63,8 +64,8 @@ export default class Dock {
 
 		let background = new createjs.Shape();
 		background.graphics
-			.setStrokeStyle(2).beginStroke(Color.dockBorder)
-			.beginFill(Color.dock)
+			.setStrokeStyle(2).beginStroke(this.colors["dockBorder"])
+			.beginFill(this.colors["dock"])
 			.drawRect(0, 0, stage.canvas.width, this.tileSize + (this.padding * 2));
 
  		container.addChild(background);
@@ -84,7 +85,7 @@ export default class Dock {
 			shape = new createjs.Shape();
  		
  		shape.graphics
- 			.setStrokeStyle(1).beginStroke(Color.white)
+ 			.setStrokeStyle(1).beginStroke("#fff")
  			.beginFill("#466964")
  			.drawRect(tilePos.x, tilePos.y, this.tileSize, this.tileSize);
 

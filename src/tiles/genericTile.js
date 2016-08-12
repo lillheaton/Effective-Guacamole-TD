@@ -1,6 +1,5 @@
 
 import BaseTile from './baseTile';
-import Color from '../color';
 
 export default class GenericTile extends BaseTile {
 	constructor(drawContainer, ...args){
@@ -8,7 +7,7 @@ export default class GenericTile extends BaseTile {
 		this.setupGraphics(drawContainer);
 	}
 
-	get color(){ return this.settings.color || Color.green; }
+	get color(){ return this.settings.color }
 	get borderColor(){ return this.settings.borderColor }
 
 	setupGraphics(drawContainer){

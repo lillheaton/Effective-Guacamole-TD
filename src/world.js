@@ -3,6 +3,7 @@ import keyMirror from 'keyMirror';
 import Vector from 'victor';
 
 import GameState from './gameState';
+import Assets from './assets';
 
 import Gird from './grid';
 import DynamicTile from './tiles/dynamicTile';
@@ -13,9 +14,9 @@ import ArrayHelper from './helpers/arrayHelper';
 
 
 export default class World {	
-	constructor(stage, settings){		
-		this.settings = settings;
-		this.map = ArrayHelper.rotate(settings.map);
+	constructor(stage){		
+		this.settings = Assets.get("world");
+		this.map = ArrayHelper.rotate(this.settings.map);
 		this.grid = [];
 		this.stage = stage;
 		this.stage.on('click', this.onWorldClick.bind(this));
@@ -149,8 +150,9 @@ export default class World {
 	}
 
 	// ==== EVENTS ====
+	
 
-	onWorldClick(click){
+	onWorldClick(click) {
 		let clickPos = this.stage.globalToLocal(click.stageX, click.stageY),
 			gridPos = this.grid.getArrayPos(clickPos);
 			

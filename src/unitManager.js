@@ -1,13 +1,14 @@
 
 import GameState from './gameState';
+import Assets from './assets';
 
 import World from './world';
 import DynamicUnit from './units/dynamicUnit';
 
 export default class UnitManager {
-	constructor(stage, settings){
+	constructor(stage){
 		this.stage = stage;
-		this.settings = settings;
+		this.settings = Assets.get("units");
 		this.units = [];
 		this.worldObstacles = null;
 
@@ -77,7 +78,9 @@ export default class UnitManager {
 
 		// Update all the units path
 		for (var i = 0; i < this.units.length; i++) {
-			this.units[i].path = world.calculatePath(world.grid.getArrayPos(this.units[i].position), world.goal);			
+			let path = world.calculatePath(world.grid.getArrayPos(this.units[i].position), world.goal);
+			if(path && path.length > 0)
+				this.units[i].path = path;			
 		};
 	}
 

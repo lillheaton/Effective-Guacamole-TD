@@ -65,7 +65,7 @@ const AStar = {
 				}
 			};
 		}
-
+		
 		return []; // Did not find any path
 	},
 

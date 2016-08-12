@@ -4,11 +4,16 @@ let CreateJs = window.createjs; // Make CreateJs more accessible
 /**
  * Wrapper for the CreateJs Preload functionallity
  */
-export default class Assets {
+class Assets {
 	constructor(){
+		this._middleware;
 		this.queue = new CreateJs.LoadQueue(true);
 		this.queue.on("complete", this.onComplete.bind(this));
 		this.working = false;
+	}
+
+	set middleware(func) {
+		this._middleware = func; 
 	}
 
 	loadManifest(path){
@@ -19,8 +24,13 @@ export default class Assets {
 		this.queue.loadManifest(path);
 	}
 
-	get(id){
-		return this.queue.getResult(id);
+	get(id, runMiddleware){
+		let result = this.queue.getResult(id);
+
+		if((runMiddleware == null || runMiddleware == true) && this._middleware && result)
+			return this._middleware(result);
+
+		return result;
 	}
 
 	onComplete(){
@@ -31,3 +41,5 @@ export default class Assets {
 		this.queue.on(name, method);
 	}
 }
+
+export default new Assets();
