@@ -67,13 +67,13 @@ export default class Game {
 		if(this.keys[37])
 			this.worldStage.regX -= cameraSpeed;
 
-		else if(this.keys[38])
+		if(this.keys[38])
 			this.worldStage.regY -= cameraSpeed;
 
-		else if(this.keys[39])
+		if(this.keys[39])
 			this.worldStage.regX += cameraSpeed;
 			
-		else if(this.keys[40])
+		if(this.keys[40])
 			this.worldStage.regY += cameraSpeed;
 	}
 
