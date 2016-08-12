@@ -1,0 +1,11 @@
+# Towers
+ - Create aiming towers
+ - Let them shoot
+ - If press shift, can create multiple towers
+
+# Units
+ - Smaller
+ - Show healt
+ - Draw point where they are moving
+
+- Add economics

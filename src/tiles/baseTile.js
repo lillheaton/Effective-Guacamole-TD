@@ -4,7 +4,7 @@ import Vector from 'victor';
 export default class BaseTile {
 	constructor(rect, settings) {
 		this.settings = settings;
-		this.rect = rect;
+		this.rect = rect;		
 		this.position = new Vector(this.rect.x + this.rect.width / 2, this.rect.y + this.rect.height / 2);
 	}
 

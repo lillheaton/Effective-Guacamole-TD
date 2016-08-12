@@ -41,7 +41,7 @@ module.exports = function(grunt){
 		    	livereload: '<%= connect.options.livereload %>'
 			},
 			scripts:{
-				files: ['<%= settings.dev %>/*.js']
+				files: ['<%= settings.dev %>/**.js']
 			},
 			html:{
 				files: ['<%= settings.dev %>/*.html'],

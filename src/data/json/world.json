@@ -17,7 +17,7 @@
 		"3": {"type": "GenericTile", "convertable": false, "start": true, "color": "greyWhite" },
 		"4": {"type": "GenericTile", "convertable": false, "goal": true, "color": "greyWhite" },
 
-		"8": {"type": "TowerTile", "attacks": true, "wall": true, "range": 1, "damage": 10, "color": "darkBlue" },
+		"8": {"type": "TowerTile", "attacks": true, "wall": true, "range": 100, "damage": 1, "color": "darkBlue", "rectColor": "greyWhite", "aimColor": "darkRed" },
 		"9": {"type": "TowerTile", "attacks": true, "wall": true, "range": 100, "damage": 5, "color": "#52616D"}
 	},
 	"tileSize": 40
