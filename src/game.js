@@ -3,6 +3,7 @@ import World from './world';
 import Assets from './assets';
 import Dock from './dock';
 import UnitManager from './unitManager';
+import GameState from './gameState';
 
 const cameraSpeed = 20;
 
@@ -64,6 +65,8 @@ export default class Game {
 
 
 	keysUpdate(){
+		GameState.updateKeys(this.keys);
+
 		if(this.keys[37])
 			this.worldStage.regX -= cameraSpeed;
 

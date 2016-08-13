@@ -1,11 +1,13 @@
 # Towers
- - Create aiming towers
- - Let them shoot
- - If press shift, can create multiple towers
+ - Visible shoots
 
 # Units
  - Smaller
  - Show healt
  - Draw point where they are moving
 
-- Add economics
+# Economics
+ - Charge for towers
+ - Give when wave is done
+
+# Lives

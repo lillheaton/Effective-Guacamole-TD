@@ -10,7 +10,9 @@ class GameState extends createjs.EventDispatcher {
 
 	init(){
 		this.placeingNewTower = false;
+		this.towerChain = false;
 		this.selectedTower = null;
+		this.keys = [];
 	}
 
 	reset(){
@@ -21,6 +23,17 @@ class GameState extends createjs.EventDispatcher {
 		return !this.placeingNewTower;
 	}
 
+	updateKeys(keys){		
+		if(keys[16] == true && this.placeingNewTower)
+			this.towerChain = true;
+
+		if(keys[16] == false && this.towerChain){
+			this.towerChain = false;
+			this.placeingNewTower = false;
+			this.selectedTower = false;
+		}
+	}
+
 	updateStatus(event, data) {
 		switch(event){
  			case Dock.Events.TOWER_SELECTED:
@@ -29,8 +42,10 @@ class GameState extends createjs.EventDispatcher {
 				break;
 
 			case World.Events.PLACED_TOWER:
-				this.placeingNewTower = false;
-				this.selectedTower = null;
+				if(!this.towerChain) { // shift is down
+					this.placeingNewTower = false;
+					this.selectedTower = null;	
+				}
 				break;
 		}
 	}
