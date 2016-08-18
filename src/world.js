@@ -2,7 +2,7 @@
 import keyMirror from 'keyMirror';
 import Vector from 'victor';
 
-import GameState from './gameState';
+import Game, { keyNames } from './game';
 import Assets from './assets';
 
 import Gird from './grid';
@@ -13,8 +13,10 @@ import AStar from './helpers/aStar';
 import ArrayHelper from './helpers/arrayHelper';
 
 
-export default class World {	
+export default class World extends createjs.EventDispatcher {	
 	constructor(stage){		
+		super();
+
 		this.settings = Assets.get("world");
 		this.map = ArrayHelper.rotate(this.settings.map);
 		this.grid = [];
@@ -65,7 +67,7 @@ export default class World {
 			this.tileSize,
 			this.tileJudger.bind(this));
 
-		GameState.raiseEvent(World.Events.WORLD_CHANGE, this);
+		this.raiseEvent(World.Events.WORLD_CHANGE, this);
 	}
 
 	/**
@@ -140,38 +142,40 @@ export default class World {
 		};
 	}
 
-
-	updateTiles(time, units){
-		for (var i = this.grid.tiles.length - 1; i >= 0; i--) {
-			for (var j = this.grid.tiles[i].length - 1; j >= 0; j--) {
-				this.grid.tiles[i][j].update(time, units);
-			}
-		}
+	raiseEvent(name, data){
+		let event = new createjs.Event(name);
+		event.data = data;
+		this.dispatchEvent(event);
 	}
+
 
 	// ==== EVENTS ====
 	
-
 	onWorldClick(click) {
 		let clickPos = this.stage.globalToLocal(click.stageX, click.stageY),
-			gridPos = this.grid.getArrayPos(clickPos);
+			gridPos = this.grid.getArrayPos(clickPos),
+			clickedTile = this.grid.tiles[gridPos.x][gridPos.y];
 			
-		if(gridPos && this.grid.tiles[gridPos.x][gridPos.y].isConvertable && GameState.placeingNewTower) {
-			this.setTile(gridPos, GameState.selectedTower);
+		if(clickedTile.isConvertable && Game.dock.selectedTower != null && Game.buyingTower(Game.dock.selectedTower.price || 100)) {			
+			this.setTile(gridPos, Game.dock.selectedTower.name);
+			this.raiseEvent(World.Events.WORLD_CHANGE, this);
 
-			GameState.raiseEvent(World.Events.PLACED_TOWER);
-			GameState.raiseEvent(World.Events.WORLD_CHANGE, this);
+			if(Game.keys[keyNames.shift] != true){
+				Game.dock.selectedTower = null;
+			}
 		}
 	}
-
-
 
 
 
 	// ==== GAME LOOPS ====
 
-	update(time, units){
-		this.updateTiles(time, units);
+	update(time){
+		for (var i = this.grid.tiles.length - 1; i >= 0; i--) {
+			for (var j = this.grid.tiles[i].length - 1; j >= 0; j--) {
+				this.grid.tiles[i][j].update(time, Game.unitManager.units);
+			}
+		}
 	}
 
 	draw(stage, time){

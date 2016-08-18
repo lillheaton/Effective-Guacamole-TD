@@ -1,5 +1,5 @@
 
-import GameState from './gameState';
+import Game from './game';
 import Assets from './assets';
 
 import World from './world';
@@ -17,7 +17,7 @@ export default class UnitManager {
 		this.sentWave = false;
 		this.wavePath = [];
 
-		GameState.on(World.Events.WORLD_CHANGE, this.onWorldChanged.bind(this));
+		Game.world.on(World.Events.WORLD_CHANGE, this.onWorldChanged.bind(this));
 	}
 
 	init(){

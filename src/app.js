@@ -1,23 +1,52 @@
 
 import Vector from 'victor';
 import Game from './game';
+import Assets from './assets';
 
 window.createjs.Point = Vector; // Override CreateJs point to be Victor lib
 
 class App {
 	constructor(){
 		this.stage = new createjs.Stage("canvas");
-		this.game = new Game(this.stage); 
 
 		window.addEventListener('resize', this.fullScreen.bind(this), false);
+		window.onkeydown = (e => Game.keys[e.keyCode] = true);
+		window.onkeyup = (e => Game.keys[e.keyCode] = false);
+		
+		Assets.middleware = this.settingsColorConverter.bind(this);
+		Assets.on('progress', (progress) => {
+			console.log(progress.loaded);
+		});
 
-		this.start();
+		Assets.on('complete', () => {
+			console.log("Assets download completed");
+			this.start(); // Start game when assets is downloaded
+		});
+
+		// Start downloading assets
+		Assets.loadManifest("data/manifest.json");
 	}
 	
-	start(){ 
+	start(){
 		this.fullScreen();
 		createjs.Ticker.addEventListener("tick", this.loop.bind(this));
 		createjs.Ticker.framerate = 30;
+
+		Game.start(this.stage);
+	}
+
+	settingsColorConverter(setting){
+		let colors = Assets.get('color', false).colors;
+
+		var temp = JSON.stringify(setting, (key, value) => {
+			if(key.indexOf("color") !== -1 || key.indexOf("Color") !== -1) {
+				return colors[value] || value;
+			}
+
+			return value;
+		});
+
+		return JSON.parse(temp);
 	}
 
 	/**
@@ -35,8 +64,8 @@ class App {
 	 */
 	loop(time){
 		// time.delta == elapsed ms
-		this.game.update(time);
-		this.game.draw(this.stage, time);
+		Game.update(time);
+		Game.draw(this.stage, time);
 		this.stage.update();
 	}
 }

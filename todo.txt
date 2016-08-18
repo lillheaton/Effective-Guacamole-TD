@@ -11,3 +11,5 @@
  - Give when wave is done
 
 # Lives
+
+Handle game state better!!!

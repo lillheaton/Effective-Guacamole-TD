@@ -3,97 +3,86 @@ import World from './world';
 import Assets from './assets';
 import Dock from './dock';
 import UnitManager from './unitManager';
-import GameState from './gameState';
 
-const cameraSpeed = 20;
+export const keyNames = {
+	shift: 16
+};
 
-export default class Game {
-	constructor(stage){
-		this.stage = stage;		
-		this.running = false;
-		this.keys = [];
-		this.worldStage = stage.addChild(new createjs.Container());
+const Game = {
+	running: false,
+	cameraSpeed: 20,
+	keys: [],
+	props: {},
 
-		Assets.middleware = this.settingsColorConverter.bind(this);
-		Assets.on('progress', (progress) => {
-			console.log(progress.loaded);
-		});
-
-		Assets.on('complete', () => {
-			console.log("Assets download completed");
-			this.start(); // Initiate the game
-		});
-
-		window.onkeydown = (e => this.keys[e.keyCode] = true);
-		window.onkeyup = (e => this.keys[e.keyCode] = false);
-		
-		// Start downloading assets
-		Assets.loadManifest("data/manifest.json");
-	}
+	world: null,
+	worldStage: null,
+	unitManager: null,
+	dock: null,
 
 	/**
 	 * Initiate all the game components
 	 * @return {void}
 	 */
-	start(){
-		// Instantiate
-		this.world = new World(this.worldStage);
-		this.unitManager = new UnitManager(this.worldStage);
-		this.dock = new Dock(this.stage);
+	start(stage){
+		Object.assign(Game.props, Assets.get('game'))
+		Game.worldStage = stage.addChild(new createjs.Container());
+
+		Game.world = new World(Game.worldStage);
+		Game.unitManager = new UnitManager(Game.worldStage);
+		Game.dock = new Dock(stage);
 
 		// Initiate
-		this.world.init();
-		this.unitManager.init();
-		this.dock.init();
+		Game.world.init();
+		Game.unitManager.init();
+		Game.dock.init();
 
-		this.running = true;
-	}
+		Game.running = true;
+	},
 
-	settingsColorConverter(setting){
-		let colors = Assets.get('color', false).colors;
+	checkKeys() {
+		if(Game.keys[37])
+			Game.worldStage.regX -= cameraSpeed;
 
-		var temp = JSON.stringify(setting, (key, value) => {
-			if(key.indexOf("color") !== -1 || key.indexOf("Color") !== -1) {
-				return colors[value] || value;
-			}
+		if(Game.keys[38])
+			Game.worldStage.regY -= cameraSpeed;
 
-			return value;
-		});
-
-		return JSON.parse(temp);
-	}
-
-
-	keysUpdate(){
-		GameState.updateKeys(this.keys);
-
-		if(this.keys[37])
-			this.worldStage.regX -= cameraSpeed;
-
-		if(this.keys[38])
-			this.worldStage.regY -= cameraSpeed;
-
-		if(this.keys[39])
-			this.worldStage.regX += cameraSpeed;
+		if(Game.keys[39])
+			Game.worldStage.regX += cameraSpeed;
 			
-		if(this.keys[40])
-			this.worldStage.regY += cameraSpeed;
-	}
+		if(Game.keys[40])
+			Game.worldStage.regY += cameraSpeed;
+	},
 
 	update(time){
-		this.keysUpdate();
+		Game.checkKeys();
 
-		if(!this.running)
+		if(!Game.running)
 			return;
 
-		this.world.update(time, this.unitManager.units);
-		this.unitManager.update(time);
-	}
+		Game.world.update(time);
+		Game.unitManager.update(time);
+		Game.dock.update(time);
+	},
 
 	draw(stage, time){
-		if(!this.running)
+		if(!Game.running)
 			return;
 
-		this.world.draw(stage, time);
+		Game.world.draw(stage, time);
+	},
+
+
+
+	// ################################
+	
+	buyingTower(price){
+		if(Game.props.cash - price >= 0){
+			Game.props.cash -= price;
+			return true;
+		}
+
+		return false;
 	}
-}
+};
+
+export default Game;

@@ -3,6 +3,7 @@
 	"manifest": [
 		{ "src": "world.json", "type": "json", "id": "world" },
 		{ "src": "units.json", "type": "json", "id": "units" },
-		{ "src": "color.json", "type": "json", "id": "color" }
+		{ "src": "color.json", "type": "json", "id": "color" },
+		{ "src": "game.json", "type": "json", "id": "game" }
 	]
 }
