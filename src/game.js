@@ -41,16 +41,16 @@ const Game = {
 
 	checkKeys() {
 		if(Game.keys[37])
-			Game.worldStage.regX -= cameraSpeed;
+			Game.worldStage.regX -= Game.cameraSpeed;
 
 		if(Game.keys[38])
-			Game.worldStage.regY -= cameraSpeed;
+			Game.worldStage.regY -= Game.cameraSpeed;
 
 		if(Game.keys[39])
-			Game.worldStage.regX += cameraSpeed;
+			Game.worldStage.regX += Game.cameraSpeed;
 			
 		if(Game.keys[40])
-			Game.worldStage.regY += cameraSpeed;
+			Game.worldStage.regY += Game.cameraSpeed;
 	},
 
 	update(time){
