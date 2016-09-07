@@ -1,4 +1,6 @@
 
+import Game from '../game';
+
 import BaseUnit from './baseUnit';
 import Vector from 'victor';
 
@@ -32,6 +34,7 @@ export default class Creep extends BaseUnit {
 	update(time, obstacles) {
 		if(this.position.distance(this.goal) <= 2){
 			this.destroy();
+			Game.loseLife();
 		}
 
 		this.steering.followPath(this._path);

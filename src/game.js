@@ -15,6 +15,7 @@ const Game = {
 	keys: [],
 	props: {},
 
+	stage: null,
 	world: null,
 	worldStage: null,
 	unitManager: null,
@@ -26,6 +27,7 @@ const Game = {
 	 */
 	start(stage){
 		Object.assign(Game.props, Assets.get('game'))
+		Game.stage = stage;
 		Game.worldStage = stage.addChild(new createjs.Container());
 
 		Game.world = new World(Game.worldStage);
@@ -38,6 +40,14 @@ const Game = {
 		Game.dock.init();
 
 		Game.running = true;
+	},
+
+	drawGameOver(){
+		let gameOver = new createjs.Text("Game Over!", "60px Arial", "#fff");
+		gameOver.x = (Game.stage.canvas.width / 2) - (gameOver.getMeasuredWidth() / 2);
+		gameOver.y = Game.stage.canvas.height / 2 - (gameOver.getMeasuredHeight() / 2);
+		
+		Game.stage.addChild(gameOver);
 	},
 
 	checkKeys() {
@@ -89,6 +99,15 @@ const Game = {
 
 	recieveCash(amount){
 		Game.props.cash += amount;
+	},
+
+	loseLife(){
+		Game.props.lives -= 1;	
+
+		if(Game.props.lives <= 0){
+			Game.running = false;
+			Game.drawGameOver();
+		}
 	}
 };
 

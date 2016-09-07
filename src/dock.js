@@ -18,7 +18,7 @@ export default class Dock {
 
 		this.drawContainer = this.createDrawContainer(stage);
 		this.drawContainer.addEventListener("click", this.onDockClick.bind(this));
-		this.createCashLabel();
+		this.createLabels();
 	}
 
 	static get Events() {
@@ -77,12 +77,19 @@ export default class Dock {
 		return container;
 	}
 
-	createCashLabel(){
+	createLabels(){
+		// Cash label
 		this.cashLabel = new createjs.Text("Cash: " + Game.props.cash, "20px Arial", "#fff");
 		this.cashLabel.y = this.height / 2;
 		this.cashLabel.x = this.rect.width - this.cashLabel.getMeasuredWidth() - 20;
 
+		// Lives label
+		this.livesLabel = new createjs.Text("Lives: " + Game.props.lives, "20px Arial", "#fff");
+		this.livesLabel.y = (this.height / 2) - 40;
+		this.livesLabel.x = this.rect.width - this.cashLabel.getMeasuredWidth() - 20;
+
 		this.drawContainer.addChild(this.cashLabel);
+		this.drawContainer.addChild(this.livesLabel);
 	}
 
 	/**
@@ -121,5 +128,6 @@ export default class Dock {
 
 	update(time){
 		this.cashLabel.text = "Cash: " + Game.props.cash;
+		this.livesLabel.text = "Lives: " + Game.props.lives;
 	}
 }
