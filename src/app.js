@@ -13,7 +13,7 @@ class App {
 		window.onkeydown = (e => Game.keys[e.keyCode] = true);
 		window.onkeyup = (e => Game.keys[e.keyCode] = false);
 		
-		Assets.middleware = this.settingsColorConverter.bind(this);
+		Assets.middleware = this.assetsMiddleware.bind(this);
 		Assets.on('progress', (progress) => {
 			console.log(progress.loaded);
 		});
@@ -35,10 +35,19 @@ class App {
 		Game.start(this.stage);
 	}
 
-	settingsColorConverter(setting){
+	assetsMiddleware(setting){
 		let colors = Assets.get('color', false).colors;
 
 		var temp = JSON.stringify(setting, (key, value) => {
+
+			if(key === "waves" && Array.isArray(value)) {
+				// if waves exist we assume setting is units.json
+				
+				for (var i = 0; i < value.length; i++) {
+					Object.assign(value[i].props, {width: setting.unitSize, height: setting.unitSize});
+				};
+			}
+
 			if(key.indexOf("color") !== -1 || key.indexOf("Color") !== -1) {
 				return colors[value] || value;
 			}

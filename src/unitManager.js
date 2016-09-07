@@ -51,7 +51,7 @@ export default class UnitManager {
 	 */
 	sendUnit(wave, sentUnits){
 		if(sentUnits < wave.length){
-			this.units.push(this.createUnit(wave.type));
+			this.units.push(this.createUnit(wave));
 			sentUnits++;
 			setTimeout(this.sendUnit.bind(this), this.settings.unitIntervalMs, wave, sentUnits);
 		} else{
@@ -59,8 +59,8 @@ export default class UnitManager {
 		}
 	}
 
-	createUnit(type){
-		return new DynamicUnit(type, this.stage, this.wavePath.map(s => s.clone()), this.settings.unitTypes[type]);
+	createUnit(currentWave){
+		return new DynamicUnit(currentWave.type, this.stage, this.wavePath.map(s => s.clone()), currentWave.props);
 	}
 
 

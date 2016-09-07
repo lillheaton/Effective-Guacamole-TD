@@ -1,11 +1,12 @@
 {
 	"waves": [
-		{ "type": "Creep", "length": 5 },
-		{ "type": "Creep", "length": 5 }
+		{ "type": "Creep", "length": 5, "props": { "health": 100 } },
+		{ "type": "Creep", "length": 5, "props": { "health": 140 } },
+		{ "type": "Creep", "length": 5, "props": { "health": 160 } },
+		{ "type": "Creep", "length": 5, "props": { "health": 180 } },
+		{ "type": "Creep", "length": 5, "props": { "health": 220 } }
 	],
-	"unitTypes": {
-		"Creep": { "width": 40, "height": 40, "health": 100 }
-	},
+	"unitSize": 30,
 	"waveIntervalMs": 5000, 
 	"unitIntervalMs": 2000
 }

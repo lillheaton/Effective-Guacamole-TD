@@ -1,4 +1,6 @@
 
+import Game from '../game';
+
 import Steering from '../helpers/steering';
 import Vector from 'victor';
 
@@ -19,7 +21,13 @@ export default class BaseUnit {
 		return this._rect;
 	}
 
-	damagedTaken(damage) { this.health -= damage; }
+	damagedTaken(damage) { 
+		this.health -= damage; 
+
+		if(!this.alive) {
+			Game.recieveCash(this.settings.worth || 50);
+		}
+	}
 
 	destroy(){ this.health = 0; }	
 	update(time){}

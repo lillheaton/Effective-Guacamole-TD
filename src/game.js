@@ -85,6 +85,10 @@ const Game = {
 		}
 
 		return false;
+	},
+
+	recieveCash(amount){
+		Game.props.cash += amount;
 	}
 };
 
