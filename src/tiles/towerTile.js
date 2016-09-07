@@ -1,6 +1,9 @@
 
 import BaseTile from './baseTile';
 import Vector from 'victor';
+
+import AnimationManager from '../animations/animationManager';
+import Shot from '../animations/shot';
 	
 export default class TowerTile extends BaseTile {
 	constructor(drawContainer, ...args){
@@ -9,6 +12,7 @@ export default class TowerTile extends BaseTile {
 		this.aimLength = this.rect.width / 2.0;
 		this.aimShape;
 
+		this.drawContainer = drawContainer;
 		this.setupGraphics(drawContainer);
 	}
 
@@ -59,11 +63,14 @@ export default class TowerTile extends BaseTile {
 		if(closeUnits.length > 0) {
 			this.updateAim(closeUnits[0]);
 
+			// Shooting
 			this.lastShoot += time.delta;
 			if(this.lastShoot > this.shootingInterval){
 				closeUnits[0].damagedTaken(this.damage);
 				this.lastShoot -= this.shootingInterval;	
 				console.log("Shooting");
+
+				AnimationManager.add(new Shot(this.drawContainer, this.position.clone(), closeUnits[0]));
 			}
 		}
 	}

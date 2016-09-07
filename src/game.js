@@ -3,6 +3,7 @@ import World from './world';
 import Assets from './assets';
 import Dock from './dock';
 import UnitManager from './unitManager';
+import AnimationManager from './animations/animationManager';
 
 export const keyNames = {
 	shift: 16
@@ -62,6 +63,8 @@ const Game = {
 		Game.world.update(time);
 		Game.unitManager.update(time);
 		Game.dock.update(time);
+		
+		AnimationManager.update(time);
 	},
 
 	draw(stage, time){

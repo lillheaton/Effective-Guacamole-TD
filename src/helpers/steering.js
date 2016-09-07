@@ -15,7 +15,7 @@ const defaultSettings = {
 
 export default class Steering {
 	constructor(boid, settings){
-		this.settings = Object.assign(defaultSettings, settings);
+		this.settings = Object.assign({}, defaultSettings, settings);
 		this.boid = boid;
 
 		this.steering = new Vector(0,0);

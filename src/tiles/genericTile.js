@@ -23,8 +23,4 @@ export default class GenericTile extends BaseTile {
  			
 		drawContainer.addChild(this.shape);
 	}
-
-	update(time){
-		//this.shape.x += 1;
-	}
 }
