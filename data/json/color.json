@@ -1,0 +1,13 @@
+{
+	"colors": {
+		"TealColor": "#466964",
+		"TealBoarderColor": "#6C8C84",
+		"greyBrownColor": "#302C29",
+		"greyWhite": "#D1D1BC",
+		"darkBlue": "#2C343B",
+		"darkRed": "#C44741",
+
+		"dock": "#292F30",
+		"dockBoarder": "#7C7977"
+	}
+}
