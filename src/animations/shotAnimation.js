@@ -1,7 +1,7 @@
 
 import Steering from '../helpers/steering';
 
-export default class Shot {
+export default class ShotAnimation {
 	constructor(drawContainer, position, target) {
 		this.steering = new Steering(this, {maxVelocity: 4.6 * 1000, mass: 15});
 		this.position = position;

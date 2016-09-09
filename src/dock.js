@@ -51,7 +51,7 @@ export default class Dock {
 		for (var prop in worldSettings.tileTypes) {
 			if(worldSettings.tileTypes.hasOwnProperty(prop)){
 				if(worldSettings.tileTypes[prop].attacks){
-					types.push({name: prop, settings: worldSettings.tileTypes[prop]});	
+					types.push({name: prop, displayName: worldSettings.tileTypes[prop].name, settings: worldSettings.tileTypes[prop]});	
 				}
 			}
 		}
@@ -101,7 +101,7 @@ export default class Dock {
 	tileJudger(gridX, gridY){
 		let tilePos = new Vector(gridX * this.tileSize + this.padding, this.padding),
 			tileType = this.tileTypes[gridX][gridY],
-			text = new createjs.Text(tileType.name, "20px Arial", this.colors["greyWhite"]),
+			text = new createjs.Text(tileType.displayName, "16px Arial", this.colors["greyWhite"]),
 			shape = new createjs.Shape();
  		
  		shape.graphics

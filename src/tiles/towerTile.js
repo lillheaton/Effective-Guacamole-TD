@@ -3,7 +3,7 @@ import BaseTile from './baseTile';
 import Vector from 'victor';
 
 import AnimationManager from '../animations/animationManager';
-import Shot from '../animations/shot';
+import DynamicAnimation from '../animations/dynamicAnimation';
 	
 export default class TowerTile extends BaseTile {
 	constructor(drawContainer, ...args){
@@ -19,6 +19,7 @@ export default class TowerTile extends BaseTile {
 	get range(){ return this.settings.range || 0; }
 	get damage(){ return this.settings.damage || 0; }
 	get shootingInterval() { return this.settings.shootingInterval || 500 }
+	get projectileAnimation() { return this.settings.projectileAnimation || "ShotAnimation" } 
 
 	setupGraphics(drawContainer){
 		let baseShape = new createjs.Shape();
@@ -70,7 +71,7 @@ export default class TowerTile extends BaseTile {
 				this.lastShoot -= this.shootingInterval;	
 				console.log("Shooting");
 
-				AnimationManager.add(new Shot(this.drawContainer, this.position.clone(), closeUnits[0]));
+				AnimationManager.add(new DynamicAnimation(this.projectileAnimation, this.drawContainer, this.position.clone(), closeUnits[0]));
 			}
 		}
 	}
