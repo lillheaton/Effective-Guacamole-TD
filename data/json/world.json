@@ -25,8 +25,32 @@
 		"3": {"type": "GenericTile", "convertable": false, "start": true, "color": "greyWhite" },
 		"4": {"type": "GenericTile", "convertable": false, "goal": true, "color": "greyWhite" },
 
-		"8": {"type": "TowerTile", "attacks": true, "wall": true, "range": 100, "damage": 10, "color": "darkBlue", "rectColor": "greyWhite", "aimColor": "darkRed" },
-		"9": {"type": "TowerTile", "attacks": true, "wall": true, "range": 100, "damage": 5, "color": "#52616D"}
+		"8": {
+			"type": "TowerTile",
+			"name": "Arrow",
+			"attacks": true, 
+			"wall": true, 
+			"range": 100, 
+			"damage": 10, 
+			"color": "darkBlue", 
+			"rectColor": "greyWhite", 
+			"aimColor": "darkRed" 
+		},
+
+		"9": { 
+			"type": "TowerTile", 
+			"name": "Bolt",
+			"attacks": true, 
+			"wall": true, 
+			"range": 400, 
+			"damage": 30, 
+			"price": 300,
+			"shootingInterval": 1500,
+			"projectileAnimation": "LightningBoltAnimation",
+			"color": "darkBlue", 
+			"rectColor": "greyWhite", 
+			"aimColor": "white" 
+		}
 	},
 	"tileSize": 40
 }
